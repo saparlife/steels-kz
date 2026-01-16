@@ -202,7 +202,7 @@ async function getCategoryFilters(categoryId: string) {
         return {
           attribute: attr,
           values,
-          type: attr.type === 'number' ? 'range' : 'select' as const,
+          type: (attr.type === 'number' ? 'range' : 'select') as 'range' | 'select',
         }
       })
   )
