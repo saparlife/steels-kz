@@ -20,12 +20,14 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createServiceClient()
 
-    const { data: admin, error } = await supabase
+    const { data, error } = await supabase
       .from('admin_users')
       .select('*')
       .eq('email', email.toLowerCase())
       .eq('is_active', true)
       .single()
+
+    const admin = data as { id: string; email: string; password_hash: string; name: string } | null
 
     if (error || !admin) {
       return NextResponse.json(
@@ -43,8 +45,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Update last login
-    await supabase
-      .from('admin_users')
+    await (supabase
+      .from('admin_users') as any)
       .update({ last_login_at: new Date().toISOString() })
       .eq('id', admin.id)
 
