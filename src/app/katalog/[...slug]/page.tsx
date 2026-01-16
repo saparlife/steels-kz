@@ -49,23 +49,24 @@ async function getCategoryByPath(slugs: string[]) {
   return currentCategory
 }
 
-async function getCategoryPath(categoryId: string) {
+async function getCategoryPath(categoryId: string): Promise<Category[]> {
   const supabase = await createClient()
   const path: Category[] = []
 
   let currentId: string | null = categoryId
 
   while (currentId) {
-    const { data } = await supabase
+    const { data: categoryData } = await supabase
       .from('categories')
       .select('*')
       .eq('id', currentId)
       .single()
 
-    if (!data) break
+    if (!categoryData) break
 
-    path.unshift(data as Category)
-    currentId = (data as Category).parent_id
+    const category = categoryData as Category
+    path.unshift(category)
+    currentId = category.parent_id
   }
 
   return path
