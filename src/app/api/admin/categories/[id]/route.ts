@@ -44,22 +44,24 @@ export async function PUT(
 
     const supabase = await createServiceClient()
 
+    const updateData = {
+      parent_id: body.parent_id,
+      slug: body.slug,
+      name_ru: body.name_ru,
+      name_kz: body.name_kz || null,
+      description_ru: body.description_ru || null,
+      description_kz: body.description_kz || null,
+      meta_title_ru: body.meta_title_ru || null,
+      meta_title_kz: body.meta_title_kz || null,
+      meta_description_ru: body.meta_description_ru || null,
+      meta_description_kz: body.meta_description_kz || null,
+      sort_order: body.sort_order || 0,
+      is_active: body.is_active ?? true,
+    }
+
     const { data, error } = await supabase
       .from('categories')
-      .update({
-        parent_id: body.parent_id,
-        slug: body.slug,
-        name_ru: body.name_ru,
-        name_kz: body.name_kz || null,
-        description_ru: body.description_ru || null,
-        description_kz: body.description_kz || null,
-        meta_title_ru: body.meta_title_ru || null,
-        meta_title_kz: body.meta_title_kz || null,
-        meta_description_ru: body.meta_description_ru || null,
-        meta_description_kz: body.meta_description_kz || null,
-        sort_order: body.sort_order || 0,
-        is_active: body.is_active ?? true,
-      })
+      .update(updateData as never)
       .eq('id', id)
       .select()
       .single()
@@ -92,8 +94,8 @@ export async function DELETE(
     const { id } = await params
     const supabase = await createServiceClient()
 
-    const { error } = await supabase
-      .from('categories')
+    const { error } = await (supabase
+      .from('categories') as any)
       .delete()
       .eq('id', id)
 
