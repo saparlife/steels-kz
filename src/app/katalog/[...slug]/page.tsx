@@ -7,7 +7,7 @@ import { Pagination } from '@/components/ui/Pagination'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedField } from '@/lib/utils'
-import type { Category, Product } from '@/types/database'
+import type { AttributeDefinition, Category, Product } from '@/types/database'
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -156,47 +156,55 @@ async function getCategoryFilters(categoryId: string) {
   const supabase = await createClient()
 
   // Get attributes linked to this category
-  const { data: categoryAttrs } = await supabase
+  const { data: categoryAttrsData } = await supabase
     .from('category_attributes')
     .select('attribute_id, attribute_definitions(*)')
     .eq('category_id', categoryId)
     .order('sort_order')
 
-  if (!categoryAttrs || categoryAttrs.length === 0) {
+  const categoryAttrs = (categoryAttrsData || []) as Array<{
+    attribute_id: string
+    attribute_definitions: AttributeDefinition | null
+  }>
+
+  if (categoryAttrs.length === 0) {
     return []
   }
 
   // Get unique values for each attribute
   const filters = await Promise.all(
-    categoryAttrs.map(async (ca) => {
-      const attr = ca.attribute_definitions as any
+    categoryAttrs
+      .filter((ca) => ca.attribute_definitions !== null)
+      .map(async (ca) => {
+        const attr = ca.attribute_definitions!
 
-      // Get products in this category
-      const { data: productAttrs } = await supabase
-        .from('product_attributes')
-        .select('value_text, value_number, products!inner(category_id)')
-        .eq('attribute_id', attr.id)
+        // Get products in this category
+        const { data: productAttrs } = await supabase
+          .from('product_attributes')
+          .select('value_text, value_number')
+          .eq('attribute_id', attr.id)
 
-      // Count unique values
-      const valueCounts: Record<string, number> = {}
-      productAttrs?.forEach((pa: any) => {
-        const value = pa.value_text || String(pa.value_number)
-        if (value) {
-          valueCounts[value] = (valueCounts[value] || 0) + 1
+        // Count unique values
+        const valueCounts: Record<string, number> = {}
+        const attrs = (productAttrs || []) as Array<{ value_text: string | null; value_number: number | null }>
+        attrs.forEach((pa) => {
+          const value = pa.value_text || (pa.value_number !== null ? String(pa.value_number) : null)
+          if (value) {
+            valueCounts[value] = (valueCounts[value] || 0) + 1
+          }
+        })
+
+        const values = Object.entries(valueCounts).map(([value, count]) => ({
+          value,
+          count,
+        }))
+
+        return {
+          attribute: attr,
+          values,
+          type: attr.type === 'number' ? 'range' : 'select' as const,
         }
       })
-
-      const values = Object.entries(valueCounts).map(([value, count]) => ({
-        value,
-        count,
-      }))
-
-      return {
-        attribute: attr,
-        values,
-        type: attr.type === 'number' ? 'range' : 'select' as const,
-      }
-    })
   )
 
   return filters.filter(f => f.values.length > 0)
