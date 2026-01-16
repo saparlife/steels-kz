@@ -42,8 +42,8 @@ async function getCategoryByPath(slugs: string[]) {
     const { data } = await query.single()
     if (!data) return null
 
-    currentCategory = data
-    parentId = data.id
+    currentCategory = data as Category
+    parentId = (data as Category).id
   }
 
   return currentCategory
@@ -64,14 +64,14 @@ async function getCategoryPath(categoryId: string) {
 
     if (!data) break
 
-    path.unshift(data)
-    currentId = data.parent_id
+    path.unshift(data as Category)
+    currentId = (data as Category).parent_id
   }
 
   return path
 }
 
-async function getSubcategories(parentId: string) {
+async function getSubcategories(parentId: string): Promise<Category[]> {
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -81,7 +81,7 @@ async function getSubcategories(parentId: string) {
     .eq('is_active', true)
     .order('sort_order')
 
-  return data || []
+  return (data || []) as Category[]
 }
 
 async function getProducts(
@@ -97,9 +97,10 @@ async function getProducts(
     .from('categories')
     .select('id, parent_id')
 
+  const categories = (allCategories || []) as { id: string; parent_id: string | null }[]
   const categoryIds = new Set<string>([categoryId])
   const findDescendants = (parentId: string) => {
-    allCategories?.forEach(cat => {
+    categories.forEach(cat => {
       if (cat.parent_id === parentId && !categoryIds.has(cat.id)) {
         categoryIds.add(cat.id)
         findDescendants(cat.id)
@@ -144,7 +145,7 @@ async function getProducts(
   const { data, count } = await query
 
   return {
-    products: data || [],
+    products: (data || []) as Product[],
     total: count || 0,
     totalPages: Math.ceil((count || 0) / PRODUCTS_PER_PAGE),
   }

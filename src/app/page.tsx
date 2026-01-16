@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedField } from '@/lib/utils'
+import type { Category, Review, FAQ, SiteSetting } from '@/types/database'
 import { Award, Clock, Package, Truck } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import Link from 'next/link'
@@ -36,10 +37,10 @@ async function getHomeData() {
   ])
 
   return {
-    categories: categoriesRes.data || [],
-    reviews: reviewsRes.data || [],
-    faq: faqRes.data || [],
-    settings: settingsRes.data || [],
+    categories: (categoriesRes.data || []) as Category[],
+    reviews: (reviewsRes.data || []) as Review[],
+    faq: (faqRes.data || []) as FAQ[],
+    settings: (settingsRes.data || []) as SiteSetting[],
   }
 }
 

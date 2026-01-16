@@ -4,7 +4,7 @@ import type { Category } from '@/types/database'
 import { Edit, FolderTree, Plus, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
-async function getCategories() {
+async function getCategories(): Promise<Category[]> {
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -13,7 +13,7 @@ async function getCategories() {
     .order('level')
     .order('sort_order')
 
-  return data || []
+  return (data || []) as Category[]
 }
 
 function buildCategoryTree(categories: Category[]): (Category & { children: Category[] })[] {

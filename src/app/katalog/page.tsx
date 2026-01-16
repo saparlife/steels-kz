@@ -2,6 +2,7 @@ import { CategoryGrid } from '@/components/catalog/CategoryGrid'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
+import type { Category } from '@/types/database'
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Полный каталог металлопроката. Черный, цветной, нержавеющий металлопрокат. Трубы, листы, арматура и многое другое.',
 }
 
-async function getCategories() {
+async function getCategories(): Promise<Category[]> {
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -20,7 +21,7 @@ async function getCategories() {
     .eq('is_active', true)
     .order('sort_order')
 
-  return data || []
+  return (data || []) as Category[]
 }
 
 export default async function CatalogPage() {
