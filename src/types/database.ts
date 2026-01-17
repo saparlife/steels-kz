@@ -103,6 +103,7 @@ export interface Database {
           sort_order: number
           views_count: number
           category_path: string[] | null
+          source_url: string | null
           created_at: string
           updated_at: string
         }
@@ -131,6 +132,7 @@ export interface Database {
           sort_order?: number
           views_count?: number
           category_path?: string[] | null
+          source_url?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -159,6 +161,7 @@ export interface Database {
           sort_order?: number
           views_count?: number
           category_path?: string[] | null
+          source_url?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -172,6 +175,7 @@ export interface Database {
           type: string
           unit: string | null
           unit_kz: string | null
+          options: string[] | null
           is_filterable: boolean
           is_searchable: boolean
           sort_order: number
@@ -185,6 +189,7 @@ export interface Database {
           type?: string
           unit?: string | null
           unit_kz?: string | null
+          options?: string[] | null
           is_filterable?: boolean
           is_searchable?: boolean
           sort_order?: number
@@ -198,6 +203,7 @@ export interface Database {
           type?: string
           unit?: string | null
           unit_kz?: string | null
+          options?: string[] | null
           is_filterable?: boolean
           is_searchable?: boolean
           sort_order?: number

@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Steel - SEO-сайт металлопроката
 
-## Getting Started
+Клон steels.kz с 177,000+ страницами для SEO-продвижения.
 
-First, run the development server:
+## Цель проекта
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Создать SEO-оптимизированный каталог металлопроката с:
+- **177,000+ уникальных страниц** товаров
+- **648 категорий** с фильтрами
+- **Мультиязычность** (RU/KZ)
+- **SSR/SSG** для максимальной индексации
+
+## Технологии
+
+- **Frontend**: Next.js 15, TypeScript, Tailwind CSS
+- **Backend**: Supabase (PostgreSQL)
+- **Хостинг**: Vercel (планируется)
+- **Парсер**: Node.js + Cheerio, Docker на Hetzner
+
+## Структура
+
+```
+src/
+├── app/
+│   ├── (main)/           # Клиентская часть
+│   │   ├── katalog/      # Каталог товаров
+│   │   ├── product/      # Страницы товаров
+│   │   └── news/         # Новости
+│   ├── (auth)/           # Авторизация
+│   └── admin/            # Админ-панель
+├── components/
+├── lib/
+└── types/
+
+scripts/
+├── parse-products.ts     # Парсер товаров
+└── (планируется)
+    ├── download-images.ts
+    └── make-unique.ts
+
+docs/
+├── PARSER.md            # Документация парсера
+└── ...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Источник данных
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Парсинг с steels.kz:
+- Категории и иерархия
+- Товары с атрибутами
+- Изображения (URL-ы, скачивание позже)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## SEO-стратегия
 
-## Learn More
+1. **Уникальный контент** - после парсинга тексты будут переработаны скриптами
+2. **Правильная структура URL** - `/katalog/category/product-slug`
+3. **Meta-теги** - уникальные title и description для каждой страницы
+4. **Структурированные данные** - JSON-LD для товаров
+5. **Sitemap** - автогенерация для всех 177k страниц
+6. **Внутренняя перелинковка** - связанные товары, хлебные крошки
 
-To learn more about Next.js, take a look at the following resources:
+## Запуск
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Установка
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Разработка
+npm run dev
 
-## Deploy on Vercel
+# Сборка
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Переменные окружения
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+## Документация
+
+- [Парсер](docs/PARSER.md) - как работает парсинг товаров
+- [TODO](TODO.md) - план работ

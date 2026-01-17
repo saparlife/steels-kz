@@ -37,7 +37,7 @@ export function CategoryCard({ category, locale, basePath = '/katalog' }: Catego
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-gray-900 group-hover:text-orange-500 transition-colors truncate">
+          <h3 className="font-medium text-gray-900 group-hover:text-orange-500 transition-colors">
             {name}
           </h3>
           {category.products_count > 0 && (

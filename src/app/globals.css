@@ -55,6 +55,21 @@
   background: #a1a1a1;
 }
 
+/* Cursor pointer for interactive elements */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+label[for],
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /* Focus styles */
 :focus-visible {
   outline: 2px solid var(--color-orange-500);

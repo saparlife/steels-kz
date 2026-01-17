@@ -28,7 +28,8 @@ export function ProductCard({ product, locale, imageUrl }: ProductCardProps) {
               src={imageUrl}
               alt={name}
               fill
-              className="object-contain p-4"
+              className="object-cover"
+              unoptimized
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">

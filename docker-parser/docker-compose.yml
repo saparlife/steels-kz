@@ -1,0 +1,7 @@
+services:
+  parser:
+    build: .
+    container_name: steel-parser
+    restart: "no"
+    env_file:
+      - .env

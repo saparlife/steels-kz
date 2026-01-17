@@ -1,5 +1,6 @@
 'use client'
 
+import { ImageUpload } from '@/components/admin/ImageUpload'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Input } from '@/components/ui/Input'
@@ -32,6 +33,8 @@ export default function NewCategoryPage() {
     meta_title_kz: '',
     meta_description_ru: '',
     meta_description_kz: '',
+    image_url: null as string | null,
+    icon_url: null as string | null,
     sort_order: 0,
     is_active: true,
   })
@@ -147,6 +150,21 @@ export default function NewCategoryPage() {
             value={formData.description_kz}
             onChange={(e) => setFormData(prev => ({ ...prev, description_kz: e.target.value }))}
           />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            <ImageUpload
+              value={formData.image_url}
+              onChange={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
+              folder="categories"
+              label="Изображение категории"
+            />
+            <ImageUpload
+              value={formData.icon_url}
+              onChange={(url) => setFormData(prev => ({ ...prev, icon_url: url }))}
+              folder="categories/icons"
+              label="Иконка категории"
+            />
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">

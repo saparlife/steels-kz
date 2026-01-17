@@ -7,15 +7,10 @@ export async function middleware(request: NextRequest) {
 
   // Handle admin routes authentication
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    // Skip login page
-    if (request.nextUrl.pathname === '/admin/login') {
-      return response
-    }
-
     // Check for admin session cookie
     const adminSession = request.cookies.get('admin_session')?.value
     if (!adminSession) {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
+      return NextResponse.redirect(new URL('/login', request.url))
     }
   }
 

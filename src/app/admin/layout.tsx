@@ -1,5 +1,8 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import {
+  ExternalLink,
   FileText,
   FolderTree,
   Home,
@@ -7,17 +10,17 @@ import {
   Newspaper,
   Package,
   Settings,
-  Users,
 } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const sidebarLinks = [
-  { href: '/admin', label: 'Дашборд', icon: Home },
+  { href: '/admin', label: 'Дашборд', icon: Home, exact: true },
   { href: '/admin/categories', label: 'Категории', icon: FolderTree },
+  { href: '/admin/attributes', label: 'Атрибуты', icon: Settings },
   { href: '/admin/products', label: 'Товары', icon: Package },
   { href: '/admin/pages', label: 'Страницы', icon: FileText },
   { href: '/admin/news', label: 'Новости', icon: Newspaper },
-  { href: '/admin/settings', label: 'Настройки', icon: Settings },
 ]
 
 export default function AdminLayout({
@@ -25,6 +28,15 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
+  const isActive = (href: string, exact?: boolean) => {
+    if (exact) {
+      return pathname === href
+    }
+    return pathname === href || pathname.startsWith(href + '/')
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Sidebar */}
@@ -43,7 +55,9 @@ export default function AdminLayout({
                   href={link.href}
                   className={cn(
                     'flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
-                    'hover:bg-gray-800 text-gray-300 hover:text-white'
+                    isActive(link.href, link.exact)
+                      ? 'bg-orange-500 text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                   )}
                 >
                   <link.icon className="w-5 h-5" />
@@ -54,7 +68,15 @@ export default function AdminLayout({
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4">
+        <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
+          <Link
+            href="/"
+            target="_blank"
+            className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+          >
+            <ExternalLink className="w-5 h-5" />
+            Открыть сайт
+          </Link>
           <Link
             href="/admin/logout"
             className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
@@ -66,17 +88,8 @@ export default function AdminLayout({
       </aside>
 
       {/* Main content */}
-      <main className="ml-64 min-h-screen">
-        <header className="bg-white shadow-sm">
-          <div className="px-6 py-4">
-            <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
-              ← Вернуться на сайт
-            </Link>
-          </div>
-        </header>
-        <div className="p-6">
-          {children}
-        </div>
+      <main className="ml-64 min-h-screen p-6">
+        {children}
       </main>
     </div>
   )

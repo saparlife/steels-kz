@@ -22,31 +22,17 @@ interface Props {
 async function getCategoryByPath(slugs: string[]) {
   const supabase = await createClient()
 
-  // Find category by traversing the path
-  let currentCategory: Category | null = null
-  let parentId: string | null = null
+  // Slug in DB is full path like "chernyj-metalloprokat/kanat-stalnoj"
+  const fullSlug = slugs.join('/')
 
-  for (const slug of slugs) {
-    const query = supabase
-      .from('categories')
-      .select('*')
-      .eq('slug', slug)
-      .eq('is_active', true)
+  const { data } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('slug', fullSlug)
+    .eq('is_active', true)
+    .single()
 
-    if (parentId) {
-      query.eq('parent_id', parentId)
-    } else {
-      query.is('parent_id', null)
-    }
-
-    const { data } = await query.single()
-    if (!data) return null
-
-    currentCategory = data as Category
-    parentId = (data as Category).id
-  }
-
-  return currentCategory
+  return data as Category | null
 }
 
 async function getCategoryPath(categoryId: string): Promise<Category[]> {
@@ -113,7 +99,7 @@ async function getProducts(
   // Build query
   let query = supabase
     .from('products')
-    .select('*', { count: 'exact' })
+    .select('*, product_images(id, url, is_primary, sort_order)', { count: 'exact' })
     .in('category_id', Array.from(categoryIds))
     .eq('is_active', true)
 
@@ -250,12 +236,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const name = getLocalizedField(category, 'name', locale)
   const description = getLocalizedField(category, 'description', locale)
 
-  // Build breadcrumb items
+  // Build breadcrumb items - each category.slug already contains full path
   const breadcrumbItems = [
     { label: t('catalog.breadcrumb'), href: '/katalog' },
-    ...categoryPath.slice(0, -1).map((cat, index) => ({
+    ...categoryPath.slice(0, -1).map((cat) => ({
       label: getLocalizedField(cat, 'name', locale),
-      href: '/katalog/' + categoryPath.slice(0, index + 1).map(c => c.slug).join('/'),
+      href: '/katalog/' + cat.slug,
     })),
     { label: name },
   ]
@@ -288,7 +274,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <CategoryGrid
             categories={subcategories}
             locale={locale}
-            basePath={currentUrl}
+            basePath="/katalog"
           />
         </div>
       )}

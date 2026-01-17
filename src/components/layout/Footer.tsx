@@ -3,10 +3,31 @@
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+interface Category {
+  id: string
+  slug: string
+  name_ru: string
+  level: number
+}
 
 export function Footer() {
   const t = useTranslations('footer')
   const tCommon = useTranslations('common')
+  const [categories, setCategories] = useState<Category[]>([])
+
+  useEffect(() => {
+    fetch('/api/categories?limit=5')
+      .then((res) => res.json())
+      .then((data) => {
+        const cats = data?.categories || data || []
+        // Берем только корневые категории (level = 0)
+        const rootCats = cats.filter((c: Category) => c.level === 0).slice(0, 5)
+        setCategories(rootCats)
+      })
+      .catch(console.error)
+  }, [])
 
   const currentYear = new Date().getFullYear()
 
@@ -54,11 +75,18 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">{t('catalog')}</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/katalog/chernyj-metalloprokat" className="hover:text-orange-400">Черный металлопрокат</Link></li>
-              <li><Link href="/katalog/cvetnoj-metalloprokat" className="hover:text-orange-400">Цветной металлопрокат</Link></li>
-              <li><Link href="/katalog/nerzhaveyuschij-metalloprokat" className="hover:text-orange-400">Нержавеющий металлопрокат</Link></li>
-              <li><Link href="/katalog/truboprovodnaya-armatura" className="hover:text-orange-400">Трубопроводная арматура</Link></li>
-              <li><Link href="/katalog" className="hover:text-orange-400">{tCommon('allCategories')}</Link></li>
+              {categories.map((cat) => (
+                <li key={cat.id}>
+                  <Link href={`/katalog/${cat.slug}`} className="hover:text-orange-400">
+                    {cat.name_ru}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/katalog" className="hover:text-orange-400 font-medium">
+                  {tCommon('allCategories')}
+                </Link>
+              </li>
             </ul>
           </div>
 

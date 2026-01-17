@@ -1,6 +1,4 @@
-import { Footer } from '@/components/layout/Footer'
-import { Header } from '@/components/layout/Header'
-import { defaultLocale, type Locale } from '@/i18n/config'
+import { type Locale } from '@/i18n/config'
 import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
@@ -80,11 +78,7 @@ export default async function RootLayout({
     <html lang={locale === 'kz' ? 'kk' : 'ru'} className={inter.variable}>
       <body className="min-h-screen bg-gray-50 font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
-          <div className="flex flex-col min-h-screen">
-            <Header locale={locale || defaultLocale} />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

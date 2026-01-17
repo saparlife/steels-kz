@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "parse:categories": "tsx --env-file=.env.local scripts/parse-categories.ts",
+    "parse:prepare": "tsx --env-file=.env.local scripts/prepare-parse.ts",
+    "parse:attributes": "tsx --env-file=.env.local scripts/parse-attributes.ts",
+    "parse:products": "tsx --env-file=.env.local scripts/parse-products.ts",
+    "download:category-images": "tsx --env-file=.env.local scripts/download-category-images.ts",
+    "download:product-images": "tsx --env-file=.env.local scripts/download-product-images.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -23,9 +29,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cheerio": "^1.1.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
