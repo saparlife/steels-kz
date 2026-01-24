@@ -81,6 +81,8 @@ export interface Database {
         Row: {
           id: string
           category_id: string
+          brand_id: string | null
+          manufacturer_id: string | null
           sku: string | null
           slug: string
           name_ru: string
@@ -110,6 +112,8 @@ export interface Database {
         Insert: {
           id?: string
           category_id: string
+          brand_id?: string | null
+          manufacturer_id?: string | null
           sku?: string | null
           slug: string
           name_ru: string
@@ -139,6 +143,8 @@ export interface Database {
         Update: {
           id?: string
           category_id?: string
+          brand_id?: string | null
+          manufacturer_id?: string | null
           sku?: string | null
           slug?: string
           name_ru?: string
@@ -443,6 +449,15 @@ export interface Database {
           is_default: boolean
           sort_order: number
           is_active: boolean
+          has_warehouse: boolean
+          warehouse_address_ru: string | null
+          warehouse_address_kz: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
         }
         Insert: {
           id?: string
@@ -460,6 +475,15 @@ export interface Database {
           is_default?: boolean
           sort_order?: number
           is_active?: boolean
+          has_warehouse?: boolean
+          warehouse_address_ru?: string | null
+          warehouse_address_kz?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
         }
         Update: {
           id?: string
@@ -477,6 +501,15 @@ export interface Database {
           is_default?: boolean
           sort_order?: number
           is_active?: boolean
+          has_warehouse?: boolean
+          warehouse_address_ru?: string | null
+          warehouse_address_kz?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
         }
       }
       reviews: {
@@ -522,6 +555,8 @@ export interface Database {
           answer_ru: string
           answer_kz: string | null
           category: string | null
+          category_id: string | null
+          page_slug: string | null
           sort_order: number
           is_active: boolean
           created_at: string
@@ -533,6 +568,8 @@ export interface Database {
           answer_ru: string
           answer_kz?: string | null
           category?: string | null
+          category_id?: string | null
+          page_slug?: string | null
           sort_order?: number
           is_active?: boolean
           created_at?: string
@@ -544,6 +581,8 @@ export interface Database {
           answer_ru?: string
           answer_kz?: string | null
           category?: string | null
+          category_id?: string | null
+          page_slug?: string | null
           sort_order?: number
           is_active?: boolean
           created_at?: string
@@ -628,6 +667,622 @@ export interface Database {
           created_at?: string
         }
       }
+      // New SEO tables
+      brands: {
+        Row: {
+          id: string
+          slug: string
+          name_ru: string
+          name_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
+          logo_url: string | null
+          website_url: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          sort_order: number
+          products_count: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          name_ru: string
+          name_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          logo_url?: string | null
+          website_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          products_count?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          name_ru?: string
+          name_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          logo_url?: string | null
+          website_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          products_count?: number
+          created_at?: string
+        }
+      }
+      manufacturers: {
+        Row: {
+          id: string
+          slug: string
+          name_ru: string
+          name_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
+          country: string | null
+          logo_url: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          sort_order: number
+          products_count: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          name_ru: string
+          name_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          country?: string | null
+          logo_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          products_count?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          name_ru?: string
+          name_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          country?: string | null
+          logo_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          products_count?: number
+          created_at?: string
+        }
+      }
+      special_offers: {
+        Row: {
+          id: string
+          slug: string
+          title_ru: string
+          title_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
+          image_url: string | null
+          discount_percent: number | null
+          valid_from: string | null
+          valid_until: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title_ru: string
+          title_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          image_url?: string | null
+          discount_percent?: number | null
+          valid_from?: string | null
+          valid_until?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title_ru?: string
+          title_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          image_url?: string | null
+          discount_percent?: number | null
+          valid_from?: string | null
+          valid_until?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+      }
+      offer_products: {
+        Row: {
+          id: string
+          offer_id: string | null
+          product_id: string | null
+          special_price: number | null
+        }
+        Insert: {
+          id?: string
+          offer_id?: string | null
+          product_id?: string | null
+          special_price?: number | null
+        }
+        Update: {
+          id?: string
+          offer_id?: string | null
+          product_id?: string | null
+          special_price?: number | null
+        }
+      }
+      documents: {
+        Row: {
+          id: string
+          slug: string
+          type: string
+          title_ru: string
+          title_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
+          file_url: string | null
+          issuer: string | null
+          issue_date: string | null
+          is_active: boolean
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          type: string
+          title_ru: string
+          title_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          file_url?: string | null
+          issuer?: string | null
+          issue_date?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          type?: string
+          title_ru?: string
+          title_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          file_url?: string | null
+          issuer?: string | null
+          issue_date?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+      }
+      gost_standards: {
+        Row: {
+          id: string
+          slug: string
+          number: string
+          title_ru: string
+          title_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
+          content_ru: string | null
+          content_kz: string | null
+          document_url: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          number: string
+          title_ru: string
+          title_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          content_ru?: string | null
+          content_kz?: string | null
+          document_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          number?: string
+          title_ru?: string
+          title_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          content_ru?: string | null
+          content_kz?: string | null
+          document_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      steel_grades: {
+        Row: {
+          id: string
+          slug: string
+          name: string
+          description_ru: string | null
+          description_kz: string | null
+          chemical_composition: Json | null
+          mechanical_properties: Json | null
+          applications_ru: string | null
+          applications_kz: string | null
+          gost_id: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          name: string
+          description_ru?: string | null
+          description_kz?: string | null
+          chemical_composition?: Json | null
+          mechanical_properties?: Json | null
+          applications_ru?: string | null
+          applications_kz?: string | null
+          gost_id?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          name?: string
+          description_ru?: string | null
+          description_kz?: string | null
+          chemical_composition?: Json | null
+          mechanical_properties?: Json | null
+          applications_ru?: string | null
+          applications_kz?: string | null
+          gost_id?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      glossary_terms: {
+        Row: {
+          id: string
+          slug: string
+          term_ru: string
+          term_kz: string | null
+          definition_ru: string
+          definition_kz: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          term_ru: string
+          term_kz?: string | null
+          definition_ru: string
+          definition_kz?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          term_ru?: string
+          term_kz?: string | null
+          definition_ru?: string
+          definition_kz?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+      }
+      guides: {
+        Row: {
+          id: string
+          slug: string
+          title_ru: string
+          title_kz: string | null
+          excerpt_ru: string | null
+          excerpt_kz: string | null
+          content_ru: string | null
+          content_kz: string | null
+          image_url: string | null
+          category: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          published_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title_ru: string
+          title_kz?: string | null
+          excerpt_ru?: string | null
+          excerpt_kz?: string | null
+          content_ru?: string | null
+          content_kz?: string | null
+          image_url?: string | null
+          category?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          published_at?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title_ru?: string
+          title_kz?: string | null
+          excerpt_ru?: string | null
+          excerpt_kz?: string | null
+          content_ru?: string | null
+          content_kz?: string | null
+          image_url?: string | null
+          category?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          published_at?: string
+          created_at?: string
+        }
+      }
+      faq_categories: {
+        Row: {
+          id: string
+          slug: string
+          name_ru: string
+          name_kz: string | null
+          description_ru: string | null
+          description_kz: string | null
+          sort_order: number
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          name_ru: string
+          name_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          name_ru?: string
+          name_kz?: string | null
+          description_ru?: string | null
+          description_kz?: string | null
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      cases: {
+        Row: {
+          id: string
+          slug: string
+          title_ru: string
+          title_kz: string | null
+          client_name: string | null
+          industry: string | null
+          excerpt_ru: string | null
+          excerpt_kz: string | null
+          content_ru: string | null
+          content_kz: string | null
+          image_url: string | null
+          meta_title_ru: string | null
+          meta_title_kz: string | null
+          meta_description_ru: string | null
+          meta_description_kz: string | null
+          is_active: boolean
+          published_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title_ru: string
+          title_kz?: string | null
+          client_name?: string | null
+          industry?: string | null
+          excerpt_ru?: string | null
+          excerpt_kz?: string | null
+          content_ru?: string | null
+          content_kz?: string | null
+          image_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          published_at?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title_ru?: string
+          title_kz?: string | null
+          client_name?: string | null
+          industry?: string | null
+          excerpt_ru?: string | null
+          excerpt_kz?: string | null
+          content_ru?: string | null
+          content_kz?: string | null
+          image_url?: string | null
+          meta_title_ru?: string | null
+          meta_title_kz?: string | null
+          meta_description_ru?: string | null
+          meta_description_kz?: string | null
+          is_active?: boolean
+          published_at?: string
+          created_at?: string
+        }
+      }
+      leads: {
+        Row: {
+          id: string
+          type: string
+          name: string
+          phone: string
+          email: string | null
+          company: string | null
+          city: string | null
+          message: string | null
+          product_id: string | null
+          category_id: string | null
+          source_page: string | null
+          utm_source: string | null
+          utm_medium: string | null
+          utm_campaign: string | null
+          status: string
+          manager_notes: string | null
+          processed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          type: string
+          name: string
+          phone: string
+          email?: string | null
+          company?: string | null
+          city?: string | null
+          message?: string | null
+          product_id?: string | null
+          category_id?: string | null
+          source_page?: string | null
+          utm_source?: string | null
+          utm_medium?: string | null
+          utm_campaign?: string | null
+          status?: string
+          manager_notes?: string | null
+          processed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          type?: string
+          name?: string
+          phone?: string
+          email?: string | null
+          company?: string | null
+          city?: string | null
+          message?: string | null
+          product_id?: string | null
+          category_id?: string | null
+          source_page?: string | null
+          utm_source?: string | null
+          utm_medium?: string | null
+          utm_campaign?: string | null
+          status?: string
+          manager_notes?: string | null
+          processed_at?: string | null
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -641,7 +1296,7 @@ export interface Database {
   }
 }
 
-// Helper types
+// Helper types for existing tables
 export type Category = Database['public']['Tables']['categories']['Row']
 export type Product = Database['public']['Tables']['products']['Row']
 export type AttributeDefinition = Database['public']['Tables']['attribute_definitions']['Row']
@@ -654,6 +1309,20 @@ export type FAQ = Database['public']['Tables']['faq']['Row']
 export type Banner = Database['public']['Tables']['banners']['Row']
 export type SiteSetting = Database['public']['Tables']['site_settings']['Row']
 
+// Helper types for new SEO tables
+export type Brand = Database['public']['Tables']['brands']['Row']
+export type Manufacturer = Database['public']['Tables']['manufacturers']['Row']
+export type SpecialOffer = Database['public']['Tables']['special_offers']['Row']
+export type OfferProduct = Database['public']['Tables']['offer_products']['Row']
+export type Document = Database['public']['Tables']['documents']['Row']
+export type GostStandard = Database['public']['Tables']['gost_standards']['Row']
+export type SteelGrade = Database['public']['Tables']['steel_grades']['Row']
+export type GlossaryTerm = Database['public']['Tables']['glossary_terms']['Row']
+export type Guide = Database['public']['Tables']['guides']['Row']
+export type FAQCategory = Database['public']['Tables']['faq_categories']['Row']
+export type Case = Database['public']['Tables']['cases']['Row']
+export type Lead = Database['public']['Tables']['leads']['Row']
+
 // Extended types with relations
 export interface CategoryWithChildren extends Category {
   children?: CategoryWithChildren[]
@@ -663,4 +1332,18 @@ export interface ProductWithAttributes extends Product {
   attributes?: (ProductAttribute & { definition: AttributeDefinition })[]
   images?: Database['public']['Tables']['product_images']['Row'][]
   category?: Category
+  brand?: Brand
+  manufacturer?: Manufacturer
+}
+
+export interface SpecialOfferWithProducts extends SpecialOffer {
+  products?: (OfferProduct & { product: Product })[]
+}
+
+export interface SteelGradeWithGost extends SteelGrade {
+  gost?: GostStandard
+}
+
+export interface FAQWithCategory extends FAQ {
+  faq_category?: FAQCategory
 }

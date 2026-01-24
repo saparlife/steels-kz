@@ -1,0 +1,33 @@
+# Robots.txt for steels.kz
+# https://steels.kz/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow admin and API
+Disallow: /admin/*
+Disallow: /api/*
+
+# Disallow auth pages
+Disallow: /login
+Disallow: /register
+Disallow: /reset-password
+
+# Disallow pagination and filter parameters
+Disallow: /katalog/*?*page=
+Disallow: /katalog/*?*sort=
+Disallow: /katalog/*?*filter=
+Disallow: /*?page=*
+Disallow: /*?sort=*
+
+# Disallow search with parameters
+Disallow: /search?*
+
+# Disallow comparison (dynamic content)
+Disallow: /sravnenie
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://steels.kz/sitemap.xml
