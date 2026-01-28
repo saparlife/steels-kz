@@ -80,22 +80,13 @@ async function getProducts(
 ) {
   const supabase = await createClient()
 
-  // Get all descendant category IDs
-  const { data: allCategories } = await supabase
+  // Get descendant category IDs using path array (categories where this categoryId is in their path)
+  const { data: descendantCats } = await supabase
     .from('categories')
-    .select('id, parent_id')
+    .select('id')
+    .contains('path', [categoryId])
 
-  const categories = (allCategories || []) as { id: string; parent_id: string | null }[]
-  const categoryIds = new Set<string>([categoryId])
-  const findDescendants = (parentId: string) => {
-    categories.forEach(cat => {
-      if (cat.parent_id === parentId && !categoryIds.has(cat.id)) {
-        categoryIds.add(cat.id)
-        findDescendants(cat.id)
-      }
-    })
-  }
-  findDescendants(categoryId)
+  const categoryIds = [categoryId, ...(descendantCats || []).map(c => c.id)]
 
   // If we have attribute filters, we need to get product IDs that match
   let filteredProductIds: string[] | null = null
@@ -175,7 +166,7 @@ async function getProducts(
   let query = supabase
     .from('products')
     .select('*, product_images(id, url, is_primary, sort_order)', { count: 'exact' })
-    .in('category_id', Array.from(categoryIds))
+    .in('category_id', categoryIds)
     .eq('is_active', true)
 
   // Apply attribute filters if any
@@ -209,7 +200,12 @@ async function getProducts(
   const to = from + PRODUCTS_PER_PAGE - 1
   query = query.range(from, to)
 
-  const { data, count } = await query
+  const { data, count, error } = await query
+
+  if (error) {
+    console.error('Error fetching products:', error)
+    return { products: [], total: 0, totalPages: 0 }
+  }
 
   return {
     products: (data || []) as Product[],
