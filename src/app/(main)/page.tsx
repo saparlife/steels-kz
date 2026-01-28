@@ -1,5 +1,4 @@
 import { CategoryCard } from '@/components/catalog/CategoryCard'
-import { Button } from '@/components/ui/Button'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedField } from '@/lib/utils'
@@ -69,12 +68,18 @@ export default async function HomePage() {
               {t('subtitle')}
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button variant="primary" size="lg">
-                <Link href="/katalog">Перейти в каталог</Link>
-              </Button>
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-gray-900">
+              <Link
+                href="/katalog"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+              >
+                Перейти в каталог
+              </Link>
+              <Link
+                href="/uznat-cenu"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-colors"
+              >
                 Получить консультацию
-              </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -231,9 +236,12 @@ export default async function HomePage() {
           <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
             Наши специалисты помогут подобрать оптимальное решение для вашего проекта
           </p>
-          <Button variant="primary" size="lg">
+          <Link
+            href="/uznat-cenu"
+            className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+          >
             Получить консультацию
-          </Button>
+          </Link>
         </div>
       </section>
     </div>

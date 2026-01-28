@@ -109,9 +109,12 @@ export function Header({ locale }: HeaderProps) {
               <Search className="w-6 h-6" />
             </button>
 
-            <Button variant="primary" className="hidden sm:flex">
+            <Link
+              href="/uznat-cenu"
+              className="hidden sm:flex px-4 py-2 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition-colors"
+            >
               {t('getPrice')}
-            </Button>
+            </Link>
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
