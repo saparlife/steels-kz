@@ -102,7 +102,8 @@ async function getProducts(
       .select('id, slug')
       .in('slug', filterSlugs)
 
-    const slugToAttrId = new Map((attrDefs || []).map(a => [a.slug, a.id]))
+    const attrs = (attrDefs || []) as { id: string; slug: string }[]
+    const slugToAttrId = new Map(attrs.map(a => [a.slug, a.id]))
 
     // For each filter, get matching product IDs
     const matchingSets: Set<string>[] = []
@@ -121,7 +122,8 @@ async function getProducts(
         .in('value_text', valueList)
 
       if (matches) {
-        matchingSets.push(new Set(matches.map(m => m.product_id)))
+        const productIds = (matches as { product_id: string }[]).map(m => m.product_id)
+        matchingSets.push(new Set(productIds))
       }
     }
 
@@ -144,7 +146,8 @@ async function getProducts(
       const { data: matches } = await rangeQuery
 
       if (matches) {
-        matchingSets.push(new Set(matches.map(m => m.product_id)))
+        const productIds = (matches as { product_id: string }[]).map(m => m.product_id)
+        matchingSets.push(new Set(productIds))
       }
     }
 
