@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { PhoneInput } from '@/components/ui/PhoneInput'
 import { Textarea } from '@/components/ui/Textarea'
 import { CheckCircle, Loader2 } from 'lucide-react'
 
@@ -115,10 +116,9 @@ export function LeadForm({
         </div>
 
         <div>
-          <Input
+          <PhoneInput
             name="phone"
-            type="tel"
-            placeholder="Телефон *"
+            placeholder="+7(XXX)XXX-XXXX"
             required
             disabled={isLoading}
           />
