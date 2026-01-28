@@ -9,7 +9,7 @@ import { Briefcase, Building2, ArrowRight } from 'lucide-react'
 import type { Case } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Кейсы и проекты - Сталь Сервис Казахстан',
+  title: 'Кейсы и проекты - Темир Сервис Казахстан',
   description: 'Реализованные проекты поставки металлопроката. Кейсы для строительства, производства, инфраструктуры.',
 }
 

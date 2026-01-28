@@ -8,7 +8,7 @@ import { Building2, Factory, HardHat, Warehouse, Wrench, Truck } from 'lucide-re
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Металлопрокат для бизнеса - Сталь Сервис Казахстан',
+  title: 'Металлопрокат для бизнеса - Темир Сервис Казахстан',
   description: 'Комплексные поставки металлопроката для строительных компаний, производств и предприятий. Договорные отношения, отсрочка, сертификаты.',
 }
 

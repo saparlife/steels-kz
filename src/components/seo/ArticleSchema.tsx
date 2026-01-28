@@ -21,9 +21,9 @@ export function ArticleSchema({
   url,
   datePublished,
   dateModified,
-  author = 'Сталь Сервис Казахстан',
+  author = 'Темир Сервис Казахстан',
   publisher = {
-    name: 'Сталь Сервис Казахстан',
+    name: 'Темир Сервис Казахстан',
     logo: 'https://steels.kz/logo.png',
   },
 }: ArticleSchemaProps) {

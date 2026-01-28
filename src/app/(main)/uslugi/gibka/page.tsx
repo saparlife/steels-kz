@@ -7,7 +7,7 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { Maximize2, CheckCircle, Ruler, Clock, Shield, Settings } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Гибка металла - Услуги металлообработки | Сталь Сервис Казахстан',
+  title: 'Гибка металла - Услуги металлообработки | Темир Сервис Казахстан',
   description: 'Услуги гибки листового металла и профиля: гибка на листогибочном прессе, вальцовка, гибка труб. Высокая точность, любые объемы.',
 }
 

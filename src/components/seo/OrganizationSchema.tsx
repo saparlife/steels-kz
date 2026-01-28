@@ -17,7 +17,7 @@ interface OrganizationSchemaProps {
 }
 
 export function OrganizationSchema({
-  name = 'Сталь Сервис Казахстан',
+  name = 'Темир Сервис Казахстан',
   url = 'https://steels.kz',
   logo = 'https://steels.kz/logo.png',
   phone = '+7 (727) 123-45-67',
@@ -54,7 +54,7 @@ export function OrganizationSchema({
 }
 
 export function LocalBusinessSchema({
-  name = 'Сталь Сервис Казахстан',
+  name = 'Темир Сервис Казахстан',
   description = 'Продажа металлопроката оптом и в розницу в Казахстане',
   url = 'https://steels.kz',
   phone = '+7 (727) 123-45-67',
@@ -118,7 +118,7 @@ export function LocalBusinessSchema({
 }
 
 export function WebSiteSchema({
-  name = 'Сталь Сервис Казахстан',
+  name = 'Темир Сервис Казахстан',
   url = 'https://steels.kz',
   searchUrl = 'https://steels.kz/search?q=',
 }: {

@@ -9,7 +9,7 @@ import { FileCheck, Award, Shield, FileText, Download } from 'lucide-react'
 import type { Document } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Сертификаты и документы - Сталь Сервис Казахстан',
+  title: 'Сертификаты и документы - Темир Сервис Казахстан',
   description: 'Сертификаты качества на металлопрокат. Документы, лицензии, паспорта качества. Гарантия соответствия ГОСТ.',
 }
 

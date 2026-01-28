@@ -7,7 +7,7 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { Scissors, CheckCircle, Ruler, Clock, Shield, Zap } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Резка металла - Услуги металлообработки | Сталь Сервис Казахстан',
+  title: 'Резка металла - Услуги металлообработки | Темир Сервис Казахстан',
   description: 'Профессиональная резка металлопроката: газовая, плазменная, ленточнопильная резка, рубка на гильотине. Точность до 1 мм, минимальные сроки.',
 }
 

@@ -7,7 +7,7 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { Flame, CheckCircle, Shield, Award, Clock, Users } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Сварка металла - Услуги металлообработки | Сталь Сервис Казахстан',
+  title: 'Сварка металла - Услуги металлообработки | Темир Сервис Казахстан',
   description: 'Профессиональные сварочные работы: MIG/MAG, TIG, ручная дуговая сварка. Сварка металлоконструкций, труб, емкостей. Сертифицированные сварщики.',
 }
 

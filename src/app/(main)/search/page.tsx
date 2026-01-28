@@ -29,7 +29,7 @@ const PRODUCTS_PER_PAGE = 24
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { q } = await searchParams
   return {
-    title: q ? `Поиск: ${q} - Сталь Сервис` : 'Поиск - Сталь Сервис',
+    title: q ? `Поиск: ${q} - Темир Сервис` : 'Поиск - Темир Сервис',
     description: `Результаты поиска по запросу "${q}" в каталоге металлопроката`,
   }
 }

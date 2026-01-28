@@ -6,7 +6,7 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { Shield, CheckCircle, FileCheck, Award, Microscope } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Гарантия качества - Сталь Сервис Казахстан',
+  title: 'Гарантия качества - Темир Сервис Казахстан',
   description: 'Система контроля качества металлопроката. Сертификаты, входной контроль, паспорта качества на продукцию.',
 }
 

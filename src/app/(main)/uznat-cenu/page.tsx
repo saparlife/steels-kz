@@ -6,7 +6,7 @@ import { FAQBlock } from '@/components/blocks/FAQBlock'
 import { CheckCircle, Clock, Phone, Shield } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Узнать цену на металлопрокат - Сталь Сервис Казахстан',
+  title: 'Узнать цену на металлопрокат - Темир Сервис Казахстан',
   description: 'Запросите актуальную цену на металлопрокат. Бесплатная консультация, расчет стоимости заказа. Ответ в течение 15 минут.',
 }
 

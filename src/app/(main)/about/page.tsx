@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: 'О компании - Сталь Сервис Казахстан',
-  description: 'Сталь Сервис - крупнейший поставщик металлопроката в Казахстане. Более 15 лет опыта, собственные склады, широкий ассортимент продукции.',
+  title: 'О компании - Темир Сервис Казахстан',
+  description: 'Темир Сервис - крупнейший поставщик металлопроката в Казахстане. Более 15 лет опыта, собственные склады, широкий ассортимент продукции.',
 }
 
 const stats = [
@@ -55,7 +55,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              О компании <span className="text-orange-500">Сталь Сервис</span>
+              О компании <span className="text-orange-500">Темир Сервис</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8">
               Мы — один из крупнейших поставщиков металлопроката в Казахстане.
@@ -90,7 +90,7 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  <strong className="text-gray-900">Сталь Сервис Казахстан</strong> — это динамично
+                  <strong className="text-gray-900">Темир Сервис Казахстан</strong> — это динамично
                   развивающаяся компания, специализирующаяся на оптовых и розничных поставках
                   металлопроката и трубопроводной арматуры.
                 </p>

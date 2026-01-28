@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: city.meta_title_ru || `Склад металлопроката в ${city.name_ru} - Сталь Сервис`,
+    title: city.meta_title_ru || `Склад металлопроката в ${city.name_ru} - Темир Сервис`,
     description: city.meta_description_ru || `Склад металлопроката в ${city.name_ru}. Адрес, телефон, режим работы. Самовывоз и доставка.`,
   }
 }

@@ -5,7 +5,7 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { Scale } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Сравнение товаров - Сталь Сервис Казахстан',
+  title: 'Сравнение товаров - Темир Сервис Казахстан',
   description: 'Сравните характеристики выбранных товаров металлопроката для выбора оптимального варианта.',
 }
 

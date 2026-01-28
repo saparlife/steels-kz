@@ -9,7 +9,7 @@ import { Building2, Package } from 'lucide-react'
 import type { Brand } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Бренды металлопроката - Сталь Сервис Казахстан',
+  title: 'Бренды металлопроката - Темир Сервис Казахстан',
   description: 'Металлопрокат от ведущих брендов России, Казахстана и мира. Работаем напрямую с производителями. Гарантия качества и сертификаты.',
 }
 

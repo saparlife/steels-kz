@@ -9,8 +9,8 @@ import { MessageCircle, ChevronRight, Search } from 'lucide-react'
 import type { FAQCategory, FAQ } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Вопросы и ответы - Сталь Сервис Казахстан',
-  description: 'Ответы на популярные вопросы о металлопрокате, доставке, оплате и услугах компании Сталь Сервис.',
+  title: 'Вопросы и ответы - Темир Сервис Казахстан',
+  description: 'Ответы на популярные вопросы о металлопрокате, доставке, оплате и услугах компании Темир Сервис.',
 }
 
 export default async function QuestionsPage() {

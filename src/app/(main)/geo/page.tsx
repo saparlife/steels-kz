@@ -8,7 +8,7 @@ import { MapPin, Truck, Warehouse } from 'lucide-react'
 import type { City } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Металлопрокат по городам Казахстана - Сталь Сервис',
+  title: 'Металлопрокат по городам Казахстана - Темир Сервис',
   description: 'Поставка металлопроката в Алматы, Астану, Караганду, Шымкент и другие города Казахстана. Склады и доставка.',
 }
 

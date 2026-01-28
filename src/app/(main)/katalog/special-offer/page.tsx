@@ -8,7 +8,7 @@ import type { SpecialOffer } from '@/types/database'
 import { Tag, Calendar, Percent } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Акции и спецпредложения на металлопрокат - Сталь Сервис Казахстан',
+  title: 'Акции и спецпредложения на металлопрокат - Темир Сервис Казахстан',
   description: 'Актуальные акции и специальные предложения на металлопрокат. Скидки на арматуру, трубы, листовой прокат. Выгодные цены в Казахстане.',
 }
 

@@ -45,7 +45,7 @@ export default function AdminLoginPage() {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">
-            СТАЛЬ<span className="text-orange-500">АДМИН</span>
+            ТЕМИР<span className="text-orange-500">АДМИН</span>
           </h1>
           <p className="text-gray-600 mt-2">Вход в панель управления</p>
         </div>

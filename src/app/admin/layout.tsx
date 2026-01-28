@@ -88,7 +88,7 @@ export default function AdminLayout({
       <aside className="fixed inset-y-0 left-0 w-64 bg-gray-900 text-white">
         <div className="p-4">
           <Link href="/admin" className="text-xl font-bold">
-            СТАЛЬ<span className="text-orange-500">АДМИН</span>
+            ТЕМИР<span className="text-orange-500">АДМИН</span>
           </Link>
         </div>
 

@@ -8,7 +8,7 @@ import { Warehouse, MapPin, Phone, Clock } from 'lucide-react'
 import type { City } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Склады металлопроката в Казахстане - Сталь Сервис',
+  title: 'Склады металлопроката в Казахстане - Темир Сервис',
   description: 'Адреса складов металлопроката в Алматы, Астане и других городах Казахстана. Самовывоз и доставка.',
 }
 

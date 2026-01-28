@@ -7,7 +7,7 @@ import { TLDRBlock } from '@/components/blocks/TLDRBlock'
 import { Handshake, TrendingUp, Package, Users, Award, BarChart3 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Партнерская программа - Сталь Сервис Казахстан',
+  title: 'Партнерская программа - Темир Сервис Казахстан',
   description: 'Станьте партнером крупнейшего поставщика металлопроката. Специальные условия для дилеров, маржа до 20%, маркетинговая поддержка.',
 }
 

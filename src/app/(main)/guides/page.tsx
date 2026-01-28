@@ -7,7 +7,7 @@ import type { Guide } from '@/types/database'
 import { BookOpen, Calendar, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Гайды и руководства по металлопрокату - Сталь Сервис',
+  title: 'Гайды и руководства по металлопрокату - Темир Сервис',
   description: 'Полезные руководства по выбору и применению металлопроката. Советы экспертов, практические рекомендации.',
 }
 

@@ -7,7 +7,7 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { Package, CheckCircle, Building2, Truck, FileText, Users, Clock, Shield } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Комплектация объектов - Поставки металлопроката | Сталь Сервис Казахстан',
+  title: 'Комплектация объектов - Поставки металлопроката | Темир Сервис Казахстан',
   description: 'Комплексная поставка металлопроката для строительных объектов. Один поставщик — все позиции. Отсрочка платежа, доставка по графику.',
 }
 

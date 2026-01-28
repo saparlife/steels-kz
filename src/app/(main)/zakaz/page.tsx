@@ -6,7 +6,7 @@ import { FAQBlock } from '@/components/blocks/FAQBlock'
 import { ClipboardList, Package, Truck, CreditCard } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Оформить заказ на металлопрокат - Сталь Сервис Казахстан',
+  title: 'Оформить заказ на металлопрокат - Темир Сервис Казахстан',
   description: 'Оформите заказ на металлопрокат онлайн. Быстрая обработка заявок, доставка по Казахстану. Оплата удобным способом.',
 }
 

@@ -4,7 +4,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { FileText, Scale, BookOpen, Ruler } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Справочник металлопроката - Сталь Сервис Казахстан',
+  title: 'Справочник металлопроката - Темир Сервис Казахстан',
   description: 'Справочные материалы по металлопрокату: ГОСТ, марки стали, характеристики материалов. Полезная информация для специалистов.',
 }
 

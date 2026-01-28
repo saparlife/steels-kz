@@ -3,12 +3,12 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Building2, Copy } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Реквизиты компании - Сталь Сервис Казахстан',
-  description: 'Банковские реквизиты, ИИН/БИН, юридический адрес компании Сталь Сервис Казахстан.',
+  title: 'Реквизиты компании - Темир Сервис Казахстан',
+  description: 'Банковские реквизиты, ИИН/БИН, юридический адрес компании Темир Сервис Казахстан.',
 }
 
 const requisites = {
-  name: 'ТОО "Сталь Сервис Казахстан"',
+  name: 'ТОО "Темир Сервис Казахстан"',
   bin: '123456789012',
   iin: '',
   address: 'г. Алматы, ул. Примерная, д. 1',

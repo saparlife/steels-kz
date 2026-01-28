@@ -408,7 +408,7 @@ CREATE POLICY "Public read site_settings" ON site_settings FOR SELECT USING (tru
 
 -- Настройки сайта по умолчанию
 INSERT INTO site_settings (key, value_ru, value_kz, type) VALUES
-('site_name', 'Сталь Сервис Казахстан', 'Сталь Сервис Қазақстан', 'text'),
+('site_name', 'Темир Сервис Казахстан', 'Темір Сервис Қазақстан', 'text'),
 ('site_description', 'Крупнейший поставщик металлопроката в Казахстане', 'Қазақстандағы ең ірі металл прокат жеткізушісі', 'text'),
 ('phone', '+7 (7273) 123-291', '+7 (7273) 123-291', 'text'),
 ('email', 'info@steels.kz', 'info@steels.kz', 'text'),

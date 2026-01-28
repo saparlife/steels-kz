@@ -6,8 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Новости - Сталь Сервис Казахстан',
-  description: 'Новости компании Сталь Сервис. Актуальная информация о ценах на металлопрокат, акциях и событиях.',
+  title: 'Новости - Темир Сервис Казахстан',
+  description: 'Новости компании Темир Сервис. Актуальная информация о ценах на металлопрокат, акциях и событиях.',
 }
 
 export default async function NewsPage({
@@ -51,7 +51,7 @@ export default async function NewsPage({
               <span className="text-orange-500">Новости</span> компании
             </h1>
             <p className="text-xl text-gray-300">
-              Актуальная информация о ценах, акциях и событиях компании Сталь Сервис
+              Актуальная информация о ценах, акциях и событиях компании Темир Сервис
             </p>
           </div>
         </div>

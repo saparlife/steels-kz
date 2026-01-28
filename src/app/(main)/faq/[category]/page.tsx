@@ -29,8 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${category.name_ru} - Вопросы и ответы | Сталь Сервис Казахстан`,
-    description: `Ответы на вопросы о ${category.name_ru.toLowerCase()}. Подробная информация для клиентов Сталь Сервис.`,
+    title: `${category.name_ru} - Вопросы и ответы | Темир Сервис Казахстан`,
+    description: `Ответы на вопросы о ${category.name_ru.toLowerCase()}. Подробная информация для клиентов Темир Сервис.`,
   }
 }
 

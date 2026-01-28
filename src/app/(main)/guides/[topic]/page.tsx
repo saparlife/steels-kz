@@ -106,7 +106,7 @@ export default async function GuideDetailPage({ params }: Props) {
                 </div>
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4" />
-                  Сталь Сервис
+                  Темир Сервис
                 </div>
               </div>
             </header>

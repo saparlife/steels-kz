@@ -2,8 +2,8 @@ import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Контакты - Сталь Сервис Казахстан',
-  description: 'Контакты компании Сталь Сервис. Адреса складов в Алматы, Астане и других городах Казахстана. Телефоны, email, режим работы.',
+  title: 'Контакты - Темир Сервис Казахстан',
+  description: 'Контакты компании Темир Сервис. Адреса складов в Алматы, Астане и других городах Казахстана. Телефоны, email, режим работы.',
 }
 
 const offices = [

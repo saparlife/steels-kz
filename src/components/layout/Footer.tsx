@@ -38,7 +38,7 @@ export function Footer() {
           {/* Company info */}
           <div>
             <div className="text-2xl font-bold text-white mb-4">
-              СТАЛЬ<span className="text-orange-500">СЕРВИС</span>
+              ТЕМИР<span className="text-orange-500">СЕРВИС</span>
             </div>
             <p className="text-sm mb-4">
               Крупнейший поставщик металлопроката в Казахстане
@@ -105,7 +105,7 @@ export function Footer() {
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-4 py-4">
           <p className="text-center text-sm">
-            © {currentYear} Сталь Сервис Казахстан. {t('copyright')}
+            © {currentYear} Темир Сервис Казахстан. {t('copyright')}
           </p>
         </div>
       </div>

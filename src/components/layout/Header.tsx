@@ -77,7 +77,7 @@ export function Header({ locale }: HeaderProps) {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <div className="text-2xl font-bold text-gray-900">
-              СТАЛЬ<span className="text-orange-500">СЕРВИС</span>
+              ТЕМИР<span className="text-orange-500">СЕРВИС</span>
             </div>
           </Link>
 

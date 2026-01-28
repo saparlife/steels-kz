@@ -108,7 +108,7 @@ export default async function AdminDashboard() {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Информация</h2>
           <div className="space-y-2 text-sm text-gray-600">
-            <p>Добро пожаловать в панель управления сайтом Сталь Сервис.</p>
+            <p>Добро пожаловать в панель управления сайтом Темир Сервис.</p>
             <p>Здесь вы можете управлять категориями, товарами, страницами и настройками сайта.</p>
           </div>
         </div>

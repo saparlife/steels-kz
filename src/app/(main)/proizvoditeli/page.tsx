@@ -9,7 +9,7 @@ import { Factory, Package, MapPin } from 'lucide-react'
 import type { Manufacturer } from '@/types/database'
 
 export const metadata: Metadata = {
-  title: 'Производители металлопроката - Сталь Сервис Казахстан',
+  title: 'Производители металлопроката - Темир Сервис Казахстан',
   description: 'Прямые поставки от крупнейших металлургических заводов. Производители из России, Казахстана, Китая. Сертификаты качества, выгодные цены.',
 }
 

@@ -4,8 +4,8 @@ import { CTABlock } from '@/components/blocks/CTABlock'
 import { FileText, CheckCircle } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Условия сотрудничества - Сталь Сервис Казахстан',
-  description: 'Условия работы с компанией Сталь Сервис: оплата, доставка, возврат, гарантии.',
+  title: 'Условия сотрудничества - Темир Сервис Казахстан',
+  description: 'Условия работы с компанией Темир Сервис: оплата, доставка, возврат, гарантии.',
 }
 
 const sections = [

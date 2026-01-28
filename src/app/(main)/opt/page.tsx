@@ -7,7 +7,7 @@ import { TLDRBlock } from '@/components/blocks/TLDRBlock'
 import { Percent, Truck, Clock, Users, FileText, Package } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Оптовые поставки металлопроката - Сталь Сервис Казахстан',
+  title: 'Оптовые поставки металлопроката - Темир Сервис Казахстан',
   description: 'Оптовые поставки металлопроката по лучшим ценам. Скидки до 15%, отсрочка платежа, персональный менеджер. Работаем по всему Казахстану.',
 }
 

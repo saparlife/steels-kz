@@ -68,7 +68,7 @@ export function ProductSchema({
       url,
       seller: {
         '@type': 'Organization',
-        name: 'Сталь Сервис Казахстан',
+        name: 'Темир Сервис Казахстан',
       },
     }
   }

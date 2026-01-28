@@ -12,7 +12,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Услуги - Сталь Сервис Казахстан',
+  title: 'Услуги - Темир Сервис Казахстан',
   description: 'Полный спектр услуг по металлопрокату: резка металла, доставка, хранение, комплектация заказов, консультации специалистов.',
 }
 

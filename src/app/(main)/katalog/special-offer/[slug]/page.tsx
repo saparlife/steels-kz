@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: offer.meta_title_ru || `${offer.title_ru} - Сталь Сервис Казахстан`,
+    title: offer.meta_title_ru || `${offer.title_ru} - Темир Сервис Казахстан`,
     description: offer.meta_description_ru || offer.description_ru || '',
   }
 }
