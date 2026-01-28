@@ -97,9 +97,9 @@ export default function PrivacyPage() {
                 По вопросам, связанным с обработкой персональных данных, вы можете обратиться:
               </p>
               <ul className="text-gray-600 mb-6 space-y-2">
-                <li>Email: <a href="mailto:privacy@steels.kz" className="text-orange-500 hover:underline">privacy@steels.kz</a></li>
-                <li>Телефон: <a href="tel:+77273123291" className="text-orange-500 hover:underline">+7 (7273) 123-291</a></li>
-                <li>Адрес: г. Алматы, ул. Примерная, 1</li>
+                <li>Email: <a href="mailto:sale@temirservice.kz" className="text-orange-500 hover:underline">sale@temirservice.kz</a></li>
+                <li>Телефон: <a href="tel:+77001618767" className="text-orange-500 hover:underline">+7 (700) 161-87-67</a></li>
+                <li>Адрес: г. Алматы, Проспект Райымбека, 221а/4</li>
               </ul>
 
               <h2 className="text-2xl font-bold text-gray-900 mb-4">10. Изменения в политике</h2>

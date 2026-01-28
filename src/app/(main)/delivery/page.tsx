@@ -219,10 +219,10 @@ export default function DeliveryPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+77273123291"
+              href="tel:+77001618767"
               className="px-8 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold transition-colors"
             >
-              +7 (7273) 123-291
+              +7 (700) 161-87-67
             </a>
             <Link
               href="/contacts"

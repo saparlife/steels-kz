@@ -165,7 +165,7 @@ export default function OptPage() {
         description="Свяжитесь с нами для получения персонального коммерческого предложения"
         primaryButton={{ text: 'Связаться с нами', href: '/contacts' }}
         secondaryButton={{ text: 'Смотреть каталог', href: '/katalog' }}
-        phone="+7 (727) 123-45-67"
+        phone="+7 (700) 161-87-67"
       />
     </div>
   )

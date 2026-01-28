@@ -143,7 +143,7 @@ export default async function QuestionsPage() {
         title="Не нашли ответ на свой вопрос?"
         description="Свяжитесь с нами, и мы ответим на любые ваши вопросы"
         primaryButton={{ text: 'Задать вопрос', href: '/contacts' }}
-        secondaryButton={{ text: 'Позвонить', href: 'tel:+77273123291' }}
+        secondaryButton={{ text: 'Позвонить', href: 'tel:+77001618767' }}
       />
     </div>
   )

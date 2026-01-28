@@ -20,10 +20,10 @@ export function OrganizationSchema({
   name = 'Темир Сервис Казахстан',
   url = 'https://steels.kz',
   logo = 'https://steels.kz/logo.png',
-  phone = '+7 (727) 123-45-67',
-  email = 'info@steels.kz',
+  phone = '+7 (700) 161-87-67',
+  email = 'sale@temirservice.kz',
   address = {
-    street: 'ул. Примерная, 1',
+    street: 'Проспект Райымбека, 221а/4',
     city: 'Алматы',
     region: 'Алматинская область',
     postalCode: '050000',
@@ -57,16 +57,16 @@ export function LocalBusinessSchema({
   name = 'Темир Сервис Казахстан',
   description = 'Продажа металлопроката оптом и в розницу в Казахстане',
   url = 'https://steels.kz',
-  phone = '+7 (727) 123-45-67',
+  phone = '+7 (700) 161-87-67',
   address = {
-    street: 'ул. Примерная, 1',
+    street: 'Проспект Райымбека, 221а/4',
     city: 'Алматы',
     region: 'Алматинская область',
     postalCode: '050000',
     country: 'KZ',
   },
   geo = { lat: 43.238949, lng: 76.945465 },
-  openingHours = ['Mo-Fr 09:00-18:00', 'Sa 10:00-15:00'],
+  openingHours = ['Mo-Su 09:30-18:30'],
   priceRange = '$$',
 }: {
   name?: string

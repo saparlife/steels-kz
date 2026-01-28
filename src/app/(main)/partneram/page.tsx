@@ -234,7 +234,7 @@ export default function PartneramPage() {
         title="Есть вопросы о партнерстве?"
         description="Свяжитесь с нашим отделом развития партнерской сети"
         primaryButton={{ text: 'Связаться с нами', href: '/contacts' }}
-        phone="+7 (727) 123-45-67"
+        phone="+7 (700) 161-87-67"
       />
     </div>
   )

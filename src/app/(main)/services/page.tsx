@@ -154,10 +154,10 @@ export default function ServicesPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+77273123291"
+              href="tel:+77001618767"
               className="px-8 py-3 bg-white text-orange-500 hover:bg-gray-100 rounded-lg font-semibold transition-colors"
             >
-              Позвонить: +7 (7273) 123-291
+              Позвонить: +7 (700) 161-87-67
             </a>
             <Link
               href="/contacts"

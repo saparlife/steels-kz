@@ -49,9 +49,9 @@ export function Header({ locale }: HeaderProps) {
       <div className="bg-gray-900 text-white py-2">
         <div className="container mx-auto px-4 flex items-center justify-between text-sm">
           <div className="flex items-center gap-4">
-            <a href="tel:+77273123291" className="flex items-center gap-2 hover:text-orange-400">
+            <a href="tel:+77001618767" className="flex items-center gap-2 hover:text-orange-400">
               <Phone className="w-4 h-4" />
-              +7 (7273) 123-291
+              +7 (700) 161-87-67
             </a>
           </div>
           <div className="flex items-center gap-2">

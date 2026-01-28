@@ -44,17 +44,17 @@ export function Footer() {
               Крупнейший поставщик металлопроката в Казахстане
             </p>
             <div className="space-y-2 text-sm">
-              <a href="tel:+77273123291" className="flex items-center gap-2 hover:text-orange-400">
+              <a href="tel:+77001618767" className="flex items-center gap-2 hover:text-orange-400">
                 <Phone className="w-4 h-4" />
-                +7 (7273) 123-291
+                +7 (700) 161-87-67
               </a>
-              <a href="mailto:info@steels.kz" className="flex items-center gap-2 hover:text-orange-400">
+              <a href="mailto:sale@temirservice.kz" className="flex items-center gap-2 hover:text-orange-400">
                 <Mail className="w-4 h-4" />
-                info@steels.kz
+                sale@temirservice.kz
               </a>
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                г. Алматы, ул. Примерная, 1
+                г. Алматы, Проспект Райымбека, 221а/4
               </p>
             </div>
           </div>

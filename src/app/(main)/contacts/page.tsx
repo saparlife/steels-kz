@@ -9,35 +9,11 @@ export const metadata: Metadata = {
 const offices = [
   {
     city: 'Алматы (главный офис)',
-    address: 'ул. Примерная, 1, БЦ "Сталь"',
-    phone: '+7 (7273) 123-291',
-    email: 'almaty@steels.kz',
-    hours: 'Пн-Пт: 9:00-18:00, Сб: 9:00-15:00',
+    address: 'Проспект Райымбека, 221а/4',
+    phone: '+7 (700) 161-87-67',
+    email: 'sale@temirservice.kz',
+    hours: 'Пн-Вс: 9:30-18:30',
     isMain: true,
-  },
-  {
-    city: 'Астана',
-    address: 'ул. Индустриальная, 25',
-    phone: '+7 (7172) 456-789',
-    email: 'astana@steels.kz',
-    hours: 'Пн-Пт: 9:00-18:00, Сб: 9:00-14:00',
-    isMain: false,
-  },
-  {
-    city: 'Караганда',
-    address: 'ул. Металлургов, 15',
-    phone: '+7 (7212) 321-654',
-    email: 'karaganda@steels.kz',
-    hours: 'Пн-Пт: 9:00-18:00',
-    isMain: false,
-  },
-  {
-    city: 'Шымкент',
-    address: 'ул. Промышленная, 8',
-    phone: '+7 (7252) 987-654',
-    email: 'shymkent@steels.kz',
-    hours: 'Пн-Пт: 9:00-18:00',
-    isMain: false,
   },
 ]
 
@@ -62,15 +38,15 @@ export default function ContactsPage() {
       <section className="py-8 bg-orange-500">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-8 text-white">
-            <a href="tel:+77273123291" className="flex items-center gap-2 hover:text-orange-100">
+            <a href="tel:+77001618767" className="flex items-center gap-2 hover:text-orange-100">
               <Phone className="w-5 h-5" />
-              <span className="font-semibold">+7 (7273) 123-291</span>
+              <span className="font-semibold">+7 (700) 161-87-67</span>
             </a>
-            <a href="mailto:info@steels.kz" className="flex items-center gap-2 hover:text-orange-100">
+            <a href="mailto:sale@temirservice.kz" className="flex items-center gap-2 hover:text-orange-100">
               <Mail className="w-5 h-5" />
-              <span className="font-semibold">info@steels.kz</span>
+              <span className="font-semibold">sale@temirservice.kz</span>
             </a>
-            <a href="https://wa.me/77771234567" className="flex items-center gap-2 hover:text-orange-100">
+            <a href="https://wa.me/77001618767" className="flex items-center gap-2 hover:text-orange-100">
               <MessageCircle className="w-5 h-5" />
               <span className="font-semibold">WhatsApp</span>
             </a>
