@@ -12,7 +12,8 @@
     "parse:attributes": "tsx --env-file=.env.local scripts/parse-attributes.ts",
     "parse:products": "tsx --env-file=.env.local scripts/parse-products.ts",
     "download:category-images": "tsx --env-file=.env.local scripts/download-category-images.ts",
-    "download:product-images": "tsx --env-file=.env.local scripts/download-product-images.ts"
+    "download:product-images": "tsx --env-file=.env.local scripts/download-product-images.ts",
+    "uniquify": "tsx --env-file=.env.local scripts/uniquify-content.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",

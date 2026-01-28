@@ -1,0 +1,8 @@
+services:
+  downloader:
+    build: .
+    container_name: steel-images
+    env_file: .env
+    ports:
+      - "3020:3000"
+    restart: "no"
