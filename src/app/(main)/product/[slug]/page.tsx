@@ -1,6 +1,6 @@
 import { ProductGallery } from '@/components/product/ProductGallery'
+import { ProductPriceRequest } from '@/components/product/ProductPriceRequest'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
-import { Button } from '@/components/ui/Button'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedField } from '@/lib/utils'
@@ -178,13 +178,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-4 mb-8">
-            <Button variant="primary" className="flex-1">
-              В корзину
-            </Button>
-            <Button variant="secondary" className="flex-1">
-              Узнать цену
-            </Button>
+          <div className="mb-8">
+            <ProductPriceRequest productId={product.id} productName={name} />
           </div>
 
           {/* Availability */}

@@ -631,19 +631,25 @@ async function main() {
 
   const startTime = Date.now()
   let processed = 0
-  let offset = 0
+  let lastId = ''
   let batchNum = 0
   const limit = DRY_RUN ? 10 : BATCH_SIZE
 
   while (true) {
-    const { data: products, error } = await supabase
+    let query = supabase
       .from('products')
       .select('id, name_ru, category_id')
       .order('id')
-      .range(offset, offset + limit - 1)
+      .limit(limit)
+
+    if (lastId) {
+      query = query.gt('id', lastId)
+    }
+
+    const { data: products, error } = await query
 
     if (error) {
-      console.error(`Error fetching products at offset ${offset}: ${error.message}`)
+      console.error(`Error fetching products after ${lastId}: ${error.message}`)
       break
     }
 
@@ -657,15 +663,13 @@ async function main() {
     )
     processed += batchProcessed
 
-    if (batchNum % 1 === 0 || DRY_RUN) {
-      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
-      const pct = totalCount ? ((processed / totalCount) * 100).toFixed(1) : '?'
-      console.log(`  Batch ${batchNum}: ${processed}/${totalCount} (${pct}%) — ${elapsed}s`)
-    }
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
+    const pct = totalCount ? ((processed / totalCount) * 100).toFixed(1) : '?'
+    console.log(`  Batch ${batchNum}: ${processed}/${totalCount} (${pct}%) — ${elapsed}s`)
 
     if (DRY_RUN) break
 
-    offset += limit
+    lastId = products[products.length - 1].id
     if (products.length < limit) break
   }
 

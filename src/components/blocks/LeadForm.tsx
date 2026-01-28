@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
@@ -19,6 +20,7 @@ interface LeadFormProps {
   buttonText?: string
   className?: string
   onSuccess?: () => void
+  redirectToThankYou?: boolean
 }
 
 export function LeadForm({
@@ -34,7 +36,9 @@ export function LeadForm({
   buttonText = 'Отправить',
   className = '',
   onSuccess,
+  redirectToThankYou = true,
 }: LeadFormProps) {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -68,8 +72,14 @@ export function LeadForm({
         throw new Error('Ошибка отправки заявки')
       }
 
-      setIsSuccess(true)
       onSuccess?.()
+
+      if (redirectToThankYou) {
+        const thankYouType = type.replace('_', '-')
+        router.push(`/thank-you/${thankYouType}`)
+      } else {
+        setIsSuccess(true)
+      }
     } catch {
       setError('Произошла ошибка. Попробуйте еще раз.')
     } finally {
