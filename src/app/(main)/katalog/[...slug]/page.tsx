@@ -80,14 +80,14 @@ async function getProducts(
 ) {
   const supabase = await createClient()
 
-  // Get direct child category IDs only (not all descendants) to keep query fast
-  const { data: childCats } = await supabase
+  // Get all descendant categories using path array
+  const { data: descendantCats } = await supabase
     .from('categories')
     .select('id')
-    .eq('parent_id', categoryId)
+    .contains('path', [categoryId])
 
-  const children = (childCats || []) as { id: string }[]
-  const categoryIds = [categoryId, ...children.map(c => c.id)]
+  const descendants = (descendantCats || []) as { id: string }[]
+  const categoryIds = [categoryId, ...descendants.map(c => c.id)]
 
   // If we have attribute filters, we need to get product IDs that match
   let filteredProductIds: string[] | null = null
@@ -166,52 +166,87 @@ async function getProducts(
     }
   }
 
-  // Build query - no count and no images join for speed
-  let query = supabase
-    .from('products')
-    .select('*')
-    .in('category_id', categoryIds)
-    .eq('is_active', true)
-
-  // Apply attribute filters if any
-  if (filteredProductIds !== null) {
-    query = query.in('id', filteredProductIds)
-  }
-
-  // Apply sorting
+  // Build sort order
+  type SortConfig = { column: string; ascending: boolean; nullsFirst?: boolean }
+  let sortConfig: SortConfig[] = []
   switch (sort) {
     case 'name_asc':
-      query = query.order('name_ru', { ascending: true })
+      sortConfig = [{ column: 'name_ru', ascending: true }]
       break
     case 'name_desc':
-      query = query.order('name_ru', { ascending: false })
+      sortConfig = [{ column: 'name_ru', ascending: false }]
       break
     case 'price_asc':
-      query = query.order('price', { ascending: true, nullsFirst: false })
+      sortConfig = [{ column: 'price', ascending: true, nullsFirst: false }]
       break
     case 'price_desc':
-      query = query.order('price', { ascending: false, nullsFirst: true })
+      sortConfig = [{ column: 'price', ascending: false, nullsFirst: true }]
       break
     case 'new':
-      query = query.order('created_at', { ascending: false })
+      sortConfig = [{ column: 'created_at', ascending: false }]
       break
     default:
-      query = query.order('sort_order').order('views_count', { ascending: false })
+      sortConfig = [{ column: 'sort_order', ascending: true }, { column: 'views_count', ascending: false }]
   }
 
-  // Pagination
+  // For large category sets, batch the query
+  const BATCH_SIZE = 30
+  let allProducts: Product[] = []
+
+  // Split categoryIds into batches and query in parallel
+  const batches: string[][] = []
+  for (let i = 0; i < categoryIds.length; i += BATCH_SIZE) {
+    batches.push(categoryIds.slice(i, i + BATCH_SIZE))
+  }
+
+  const batchResults = await Promise.all(
+    batches.map(async (batchIds) => {
+      let query = supabase
+        .from('products')
+        .select('*')
+        .in('category_id', batchIds)
+        .eq('is_active', true)
+
+      if (filteredProductIds !== null) {
+        query = query.in('id', filteredProductIds)
+      }
+
+      for (const s of sortConfig) {
+        query = query.order(s.column, { ascending: s.ascending, nullsFirst: s.nullsFirst })
+      }
+
+      // Get more than needed, we'll sort and paginate after merging
+      query = query.limit(PRODUCTS_PER_PAGE * 2)
+
+      const { data, error } = await query
+      if (error) {
+        console.error('Error fetching products batch:', error)
+        return []
+      }
+      return (data || []) as Product[]
+    })
+  )
+
+  // Merge and sort all results
+  allProducts = batchResults.flat()
+
+  // Sort merged results
+  allProducts.sort((a, b) => {
+    for (const s of sortConfig) {
+      const aVal = a[s.column as keyof Product]
+      const bVal = b[s.column as keyof Product]
+      if (aVal === bVal) continue
+      if (aVal === null) return s.nullsFirst ? -1 : 1
+      if (bVal === null) return s.nullsFirst ? 1 : -1
+      const cmp = aVal < bVal ? -1 : 1
+      return s.ascending ? cmp : -cmp
+    }
+    return 0
+  })
+
+  // Paginate
   const from = (page - 1) * PRODUCTS_PER_PAGE
-  const to = from + PRODUCTS_PER_PAGE - 1
-  query = query.range(from, to)
-
-  const { data, error } = await query
-
-  if (error) {
-    console.error('Error fetching products:', error)
-    return { products: [] }
-  }
-
-  const products = (data || []) as Product[]
+  const products = allProducts.slice(from, from + PRODUCTS_PER_PAGE)
 
   // Load images separately (faster than join on large queries)
   type ProductImage = { id: string; product_id: string; url: string; is_primary: boolean; sort_order: number }
