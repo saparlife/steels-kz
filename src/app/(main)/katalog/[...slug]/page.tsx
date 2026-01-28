@@ -166,10 +166,10 @@ async function getProducts(
     }
   }
 
-  // Build query
+  // Build query - no count: 'exact' to avoid full table scan
   let query = supabase
     .from('products')
-    .select('*, product_images(id, url, is_primary, sort_order)', { count: 'exact' })
+    .select('*, product_images(id, url, is_primary, sort_order)')
     .in('category_id', categoryIds)
     .eq('is_active', true)
 
@@ -204,17 +204,15 @@ async function getProducts(
   const to = from + PRODUCTS_PER_PAGE - 1
   query = query.range(from, to)
 
-  const { data, count, error } = await query
+  const { data, error } = await query
 
   if (error) {
     console.error('Error fetching products:', error)
-    return { products: [], total: 0, totalPages: 0 }
+    return { products: [] }
   }
 
   return {
     products: (data || []) as Product[],
-    total: count || 0,
-    totalPages: Math.ceil((count || 0) / PRODUCTS_PER_PAGE),
   }
 }
 
@@ -321,7 +319,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     }
   }
 
-  const [categoryPath, subcategories, { products, total, totalPages }, filters] = await Promise.all([
+  const [categoryPath, subcategories, { products }, filters] = await Promise.all([
     getCategoryPath(category.id),
     getSubcategories(category.id),
     getProducts(
@@ -333,6 +331,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ),
     getCategoryFilters(category.id),
   ])
+
+  // Use pre-calculated products_count from category instead of expensive count query
+  const total = category.products_count || 0
+  const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE)
 
   const name = getLocalizedField(category, 'name', locale)
   const description = getLocalizedField(category, 'description', locale)
