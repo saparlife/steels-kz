@@ -166,10 +166,10 @@ async function getProducts(
     }
   }
 
-  // Build query - no count: 'exact' to avoid full table scan
+  // Build query - no count and no images join for speed
   let query = supabase
     .from('products')
-    .select('*, product_images(id, url, is_primary, sort_order)')
+    .select('*')
     .in('category_id', categoryIds)
     .eq('is_active', true)
 
@@ -211,9 +211,30 @@ async function getProducts(
     return { products: [] }
   }
 
-  return {
-    products: (data || []) as Product[],
+  const products = (data || []) as Product[]
+
+  // Load images separately (faster than join on large queries)
+  if (products.length > 0) {
+    const productIds = products.map(p => p.id)
+    const { data: images } = await supabase
+      .from('product_images')
+      .select('id, product_id, url, is_primary, sort_order')
+      .in('product_id', productIds)
+
+    // Attach images to products
+    const imagesByProduct = new Map<string, typeof images>()
+    for (const img of images || []) {
+      const existing = imagesByProduct.get(img.product_id) || []
+      existing.push(img)
+      imagesByProduct.set(img.product_id, existing)
+    }
+
+    for (const product of products) {
+      (product as Product & { product_images?: typeof images }).product_images = imagesByProduct.get(product.id) || []
+    }
   }
+
+  return { products }
 }
 
 async function getCategoryFilters(categoryId: string) {
