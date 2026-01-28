@@ -80,14 +80,14 @@ async function getProducts(
 ) {
   const supabase = await createClient()
 
-  // Get descendant category IDs using path array (categories where this categoryId is in their path)
-  const { data: descendantCats } = await supabase
+  // Get direct child category IDs only (not all descendants) to keep query fast
+  const { data: childCats } = await supabase
     .from('categories')
     .select('id')
-    .contains('path', [categoryId])
+    .eq('parent_id', categoryId)
 
-  const descendants = (descendantCats || []) as { id: string }[]
-  const categoryIds = [categoryId, ...descendants.map(c => c.id)]
+  const children = (childCats || []) as { id: string }[]
+  const categoryIds = [categoryId, ...children.map(c => c.id)]
 
   // If we have attribute filters, we need to get product IDs that match
   let filteredProductIds: string[] | null = null
@@ -214,23 +214,27 @@ async function getProducts(
   const products = (data || []) as Product[]
 
   // Load images separately (faster than join on large queries)
+  type ProductImage = { id: string; product_id: string; url: string; is_primary: boolean; sort_order: number }
+
   if (products.length > 0) {
     const productIds = products.map(p => p.id)
-    const { data: images } = await supabase
+    const { data: imagesData } = await supabase
       .from('product_images')
       .select('id, product_id, url, is_primary, sort_order')
       .in('product_id', productIds)
 
+    const images = (imagesData || []) as ProductImage[]
+
     // Attach images to products
-    const imagesByProduct = new Map<string, typeof images>()
-    for (const img of images || []) {
+    const imagesByProduct = new Map<string, ProductImage[]>()
+    for (const img of images) {
       const existing = imagesByProduct.get(img.product_id) || []
       existing.push(img)
       imagesByProduct.set(img.product_id, existing)
     }
 
     for (const product of products) {
-      (product as Product & { product_images?: typeof images }).product_images = imagesByProduct.get(product.id) || []
+      (product as Product & { product_images?: ProductImage[] }).product_images = imagesByProduct.get(product.id) || []
     }
   }
 
