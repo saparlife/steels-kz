@@ -411,14 +411,14 @@ INSERT INTO site_settings (key, value_ru, value_kz, type) VALUES
 ('site_name', 'Темир Сервис Казахстан', 'Темір Сервис Қазақстан', 'text'),
 ('site_description', 'Крупнейший поставщик металлопроката в Казахстане', 'Қазақстандағы ең ірі металл прокат жеткізушісі', 'text'),
 ('phone', '+7 (700) 161-87-67', '+7 (700) 161-87-67', 'text'),
-('email', 'sale@temirservice.kz', 'sale@temirservice.kz', 'text'),
+('email', 'sale@temir-service.kz', 'sale@temir-service.kz', 'text'),
 ('address', 'г. Алматы, Проспект Райымбека, 221а/4', 'Алматы қ., Райымбек даңғылы, 221а/4', 'text'),
 ('working_hours', 'Пн-Вс: 9:30 - 18:30', 'Дс-Жс: 9:30 - 18:30', 'text'),
 ('whatsapp', '+77001618767', '+77001618767', 'text');
 
 -- Город по умолчанию
 INSERT INTO cities (slug, name_ru, name_kz, phone, email, address_ru, address_kz, working_hours_ru, working_hours_kz, is_default) VALUES
-('almaty', 'Алматы', 'Алматы', '+7 (700) 161-87-67', 'sale@temirservice.kz', 'г. Алматы, Проспект Райымбека, 221а/4', 'Алматы қ., Райымбек даңғылы, 221а/4', 'Пн-Вс: 9:30 - 18:30', 'Дс-Жс: 9:30 - 18:30', true);
+('almaty', 'Алматы', 'Алматы', '+7 (700) 161-87-67', 'sale@temir-service.kz', 'г. Алматы, Проспект Райымбека, 221а/4', 'Алматы қ., Райымбек даңғылы, 221а/4', 'Пн-Вс: 9:30 - 18:30', 'Дс-Жс: 9:30 - 18:30', true);
 
 -- Базовые атрибуты для фильтров
 INSERT INTO attribute_definitions (slug, name_ru, name_kz, type, unit, unit_kz, is_filterable, sort_order) VALUES

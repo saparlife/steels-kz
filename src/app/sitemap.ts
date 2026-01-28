@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://steels.kz'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://temir-service.kz'
 
 // Simple interfaces for sitemap data
 interface SlugItem { slug: string }

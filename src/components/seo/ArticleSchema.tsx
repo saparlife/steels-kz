@@ -24,7 +24,7 @@ export function ArticleSchema({
   author = 'Темир Сервис Казахстан',
   publisher = {
     name: 'Темир Сервис Казахстан',
-    logo: 'https://steels.kz/logo.png',
+    logo: 'https://temir-service.kz/logo.png',
   },
 }: ArticleSchemaProps) {
   const schema: Record<string, unknown> = {

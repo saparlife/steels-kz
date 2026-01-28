@@ -1,5 +1,5 @@
-# Robots.txt for steels.kz
-# https://steels.kz/robots.txt
+# Robots.txt for temir-service.kz
+# https://temir-service.kz/robots.txt
 
 User-agent: *
 Allow: /
@@ -30,4 +30,4 @@ Disallow: /sravnenie
 Crawl-delay: 1
 
 # Sitemap
-Sitemap: https://steels.kz/sitemap.xml
+Sitemap: https://temir-service.kz/sitemap.xml

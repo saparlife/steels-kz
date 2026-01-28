@@ -18,10 +18,10 @@ interface OrganizationSchemaProps {
 
 export function OrganizationSchema({
   name = 'Темир Сервис Казахстан',
-  url = 'https://steels.kz',
-  logo = 'https://steels.kz/logo.png',
+  url = 'https://temir-service.kz',
+  logo = 'https://temir-service.kz/logo.png',
   phone = '+7 (700) 161-87-67',
-  email = 'sale@temirservice.kz',
+  email = 'sale@temir-service.kz',
   address = {
     street: 'Проспект Райымбека, 221а/4',
     city: 'Алматы',
@@ -56,7 +56,7 @@ export function OrganizationSchema({
 export function LocalBusinessSchema({
   name = 'Темир Сервис Казахстан',
   description = 'Продажа металлопроката оптом и в розницу в Казахстане',
-  url = 'https://steels.kz',
+  url = 'https://temir-service.kz',
   phone = '+7 (700) 161-87-67',
   address = {
     street: 'Проспект Райымбека, 221а/4',
@@ -119,8 +119,8 @@ export function LocalBusinessSchema({
 
 export function WebSiteSchema({
   name = 'Темир Сервис Казахстан',
-  url = 'https://steels.kz',
-  searchUrl = 'https://steels.kz/search?q=',
+  url = 'https://temir-service.kz',
+  searchUrl = 'https://temir-service.kz/search?q=',
 }: {
   name?: string
   url?: string

@@ -48,9 +48,9 @@ export function Footer() {
                 <Phone className="w-4 h-4" />
                 +7 (700) 161-87-67
               </a>
-              <a href="mailto:sale@temirservice.kz" className="flex items-center gap-2 hover:text-orange-400">
+              <a href="mailto:sale@temir-service.kz" className="flex items-center gap-2 hover:text-orange-400">
                 <Mail className="w-4 h-4" />
-                sale@temirservice.kz
+                sale@temir-service.kz
               </a>
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />

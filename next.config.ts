@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'steels.kz',
+        hostname: 'temir-service.kz',
       },
     ],
     formats: ['image/avif', 'image/webp'],

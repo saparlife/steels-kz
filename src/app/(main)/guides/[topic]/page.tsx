@@ -63,7 +63,7 @@ export default async function GuideDetailPage({ params }: Props) {
         headline={guide.title_ru}
         description={guide.excerpt_ru || undefined}
         image={guide.image_url || undefined}
-        url={`https://steels.kz/guides/${guide.slug}`}
+        url={`https://temir-service.kz/guides/${guide.slug}`}
         datePublished={guide.published_at}
         dateModified={guide.created_at}
       />

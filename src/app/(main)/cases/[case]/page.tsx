@@ -55,7 +55,7 @@ export default async function CaseDetailPage({ params }: Props) {
         headline={caseItem.title_ru}
         description={caseItem.excerpt_ru || undefined}
         image={caseItem.image_url || undefined}
-        url={`https://steels.kz/cases/${caseItem.slug}`}
+        url={`https://temir-service.kz/cases/${caseItem.slug}`}
         datePublished={caseItem.published_at}
       />
 

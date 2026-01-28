@@ -29,14 +29,14 @@ export default function PrivacyPage() {
               <p className="text-gray-600 mb-6">
                 Настоящая политика конфиденциальности персональных данных (далее — Политика) действует
                 в отношении всей информации, которую ТОО «Темир Сервис Казахстан» (далее — Компания)
-                может получить о Пользователе во время использования сайта steels.kz.
+                может получить о Пользователе во время использования сайта temir-service.kz.
               </p>
 
               <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Определения</h2>
               <ul className="text-gray-600 mb-6 space-y-2">
                 <li><strong>Персональные данные</strong> — любая информация, относящаяся к прямо или косвенно определенному или определяемому физическому лицу.</li>
                 <li><strong>Обработка персональных данных</strong> — любое действие с персональными данными, включая сбор, запись, систематизацию, накопление, хранение, уточнение, извлечение, использование, передачу, удаление.</li>
-                <li><strong>Пользователь</strong> — любой посетитель веб-сайта steels.kz.</li>
+                <li><strong>Пользователь</strong> — любой посетитель веб-сайта temir-service.kz.</li>
               </ul>
 
               <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Какие данные мы собираем</h2>
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
                 По вопросам, связанным с обработкой персональных данных, вы можете обратиться:
               </p>
               <ul className="text-gray-600 mb-6 space-y-2">
-                <li>Email: <a href="mailto:sale@temirservice.kz" className="text-orange-500 hover:underline">sale@temirservice.kz</a></li>
+                <li>Email: <a href="mailto:sale@temir-service.kz" className="text-orange-500 hover:underline">sale@temir-service.kz</a></li>
                 <li>Телефон: <a href="tel:+77001618767" className="text-orange-500 hover:underline">+7 (700) 161-87-67</a></li>
                 <li>Адрес: г. Алматы, Проспект Райымбека, 221а/4</li>
               </ul>

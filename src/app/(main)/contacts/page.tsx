@@ -11,7 +11,7 @@ const offices = [
     city: 'Алматы (главный офис)',
     address: 'Проспект Райымбека, 221а/4',
     phone: '+7 (700) 161-87-67',
-    email: 'sale@temirservice.kz',
+    email: 'sale@temir-service.kz',
     hours: 'Пн-Вс: 9:30-18:30',
     isMain: true,
   },
@@ -42,9 +42,9 @@ export default function ContactsPage() {
               <Phone className="w-5 h-5" />
               <span className="font-semibold">+7 (700) 161-87-67</span>
             </a>
-            <a href="mailto:sale@temirservice.kz" className="flex items-center gap-2 hover:text-orange-100">
+            <a href="mailto:sale@temir-service.kz" className="flex items-center gap-2 hover:text-orange-100">
               <Mail className="w-5 h-5" />
-              <span className="font-semibold">sale@temirservice.kz</span>
+              <span className="font-semibold">sale@temir-service.kz</span>
             </a>
             <a href="https://wa.me/77001618767" className="flex items-center gap-2 hover:text-orange-100">
               <MessageCircle className="w-5 h-5" />
