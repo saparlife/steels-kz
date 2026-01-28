@@ -321,18 +321,37 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     }
   }
 
-  const [categoryPath, subcategories, { products, total, totalPages }, filters] = await Promise.all([
+  // First get subcategories to determine if this is a leaf category
+  const [categoryPath, subcategories] = await Promise.all([
     getCategoryPath(category.id),
     getSubcategories(category.id),
-    getProducts(
-      category.id,
-      Number(search.page) || 1,
-      String(search.sort || 'popular'),
-      selectFilters,
-      rangeFilters
-    ),
-    getCategoryFilters(category.id),
   ])
+
+  const hasSubcategories = subcategories.length > 0
+
+  // Only fetch products and filters for leaf categories (no subcategories)
+  // This avoids expensive queries that timeout on large parent categories
+  let products: Product[] = []
+  let total = 0
+  let totalPages = 0
+  let filters: Awaited<ReturnType<typeof getCategoryFilters>> = []
+
+  if (!hasSubcategories) {
+    const [productsData, filtersData] = await Promise.all([
+      getProducts(
+        category.id,
+        Number(search.page) || 1,
+        String(search.sort || 'popular'),
+        selectFilters,
+        rangeFilters
+      ),
+      getCategoryFilters(category.id),
+    ])
+    products = productsData.products
+    total = productsData.total
+    totalPages = productsData.totalPages
+    filters = filtersData
+  }
 
   const name = getLocalizedField(category, 'name', locale)
   const description = getLocalizedField(category, 'description', locale)
@@ -350,8 +369,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const currentPage = Number(search.page) || 1
   const currentUrl = `/katalog/${slug.join('/')}`
 
-  const hasSubcategories = subcategories.length > 0
-
   return (
     <div className="container mx-auto px-4 py-8">
       <Breadcrumbs items={breadcrumbItems} />
@@ -361,9 +378,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         {description && (
           <p className="mt-2 text-gray-600">{description}</p>
         )}
-        <p className="mt-2 text-sm text-gray-500">
-          {total} {t('common.products')}
-        </p>
+        {!hasSubcategories && (
+          <p className="mt-2 text-sm text-gray-500">
+            {total} {t('common.products')}
+          </p>
+        )}
       </div>
 
       {/* Subcategories */}
