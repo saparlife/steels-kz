@@ -75,7 +75,8 @@ async function getProducts(
   categoryId: string,
   page: number,
   sort: string,
-  filters: Record<string, string>
+  filters: Record<string, string>,
+  rangeFilters: Record<string, { min?: string; max?: string }>
 ) {
   const supabase = await createClient()
 
@@ -96,12 +97,91 @@ async function getProducts(
   }
   findDescendants(categoryId)
 
+  // If we have attribute filters, we need to get product IDs that match
+  let filteredProductIds: string[] | null = null
+
+  const hasFilters = Object.keys(filters).length > 0 || Object.keys(rangeFilters).length > 0
+
+  if (hasFilters) {
+    // Get attribute definitions by slug
+    const filterSlugs = [...Object.keys(filters), ...Object.keys(rangeFilters)]
+    const { data: attrDefs } = await supabase
+      .from('attribute_definitions')
+      .select('id, slug')
+      .in('slug', filterSlugs)
+
+    const slugToAttrId = new Map((attrDefs || []).map(a => [a.slug, a.id]))
+
+    // For each filter, get matching product IDs
+    const matchingSets: Set<string>[] = []
+
+    for (const [slug, values] of Object.entries(filters)) {
+      const attrId = slugToAttrId.get(slug)
+      if (!attrId) continue
+
+      const valueList = values.split(',').filter(Boolean)
+      if (valueList.length === 0) continue
+
+      const { data: matches } = await supabase
+        .from('product_attributes')
+        .select('product_id')
+        .eq('attribute_id', attrId)
+        .in('value_text', valueList)
+
+      if (matches) {
+        matchingSets.push(new Set(matches.map(m => m.product_id)))
+      }
+    }
+
+    for (const [slug, range] of Object.entries(rangeFilters)) {
+      const attrId = slugToAttrId.get(slug)
+      if (!attrId) continue
+
+      let rangeQuery = supabase
+        .from('product_attributes')
+        .select('product_id')
+        .eq('attribute_id', attrId)
+
+      if (range.min) {
+        rangeQuery = rangeQuery.gte('value_number', parseFloat(range.min))
+      }
+      if (range.max) {
+        rangeQuery = rangeQuery.lte('value_number', parseFloat(range.max))
+      }
+
+      const { data: matches } = await rangeQuery
+
+      if (matches) {
+        matchingSets.push(new Set(matches.map(m => m.product_id)))
+      }
+    }
+
+    // Intersect all matching sets
+    if (matchingSets.length > 0) {
+      filteredProductIds = Array.from(
+        matchingSets.reduce((acc, set) => {
+          return new Set([...acc].filter(id => set.has(id)))
+        })
+      )
+
+      // If no products match the filters, return empty
+      if (filteredProductIds.length === 0) {
+        return { products: [], total: 0, totalPages: 0 }
+      }
+    }
+  }
+
   // Build query
   let query = supabase
     .from('products')
     .select('*, product_images(id, url, is_primary, sort_order)', { count: 'exact' })
     .in('category_id', Array.from(categoryIds))
     .eq('is_active', true)
+
+  // Apply attribute filters if any
+  if (filteredProductIds !== null) {
+    query = query.in('id', filteredProductIds)
+  }
 
   // Apply sorting
   switch (sort) {
@@ -221,6 +301,26 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     notFound()
   }
 
+  // Parse filters from searchParams
+  const selectFilters: Record<string, string> = {}
+  const rangeFilters: Record<string, { min?: string; max?: string }> = {}
+
+  for (const [key, value] of Object.entries(search)) {
+    if (key === 'page' || key === 'sort' || !value) continue
+
+    if (key.endsWith('_min') || key.endsWith('_max')) {
+      const attrSlug = key.replace(/_min$|_max$/, '')
+      if (!rangeFilters[attrSlug]) rangeFilters[attrSlug] = {}
+      if (key.endsWith('_min')) {
+        rangeFilters[attrSlug].min = String(value)
+      } else {
+        rangeFilters[attrSlug].max = String(value)
+      }
+    } else {
+      selectFilters[key] = String(value)
+    }
+  }
+
   const [categoryPath, subcategories, { products, total, totalPages }, filters] = await Promise.all([
     getCategoryPath(category.id),
     getSubcategories(category.id),
@@ -228,7 +328,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       category.id,
       Number(search.page) || 1,
       String(search.sort || 'popular'),
-      {} // filters from searchParams
+      selectFilters,
+      rangeFilters
     ),
     getCategoryFilters(category.id),
   ])
