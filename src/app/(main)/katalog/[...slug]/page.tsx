@@ -86,7 +86,8 @@ async function getProducts(
     .select('id')
     .contains('path', [categoryId])
 
-  const categoryIds = [categoryId, ...(descendantCats || []).map(c => c.id)]
+  const descendants = (descendantCats || []) as { id: string }[]
+  const categoryIds = [categoryId, ...descendants.map(c => c.id)]
 
   // If we have attribute filters, we need to get product IDs that match
   let filteredProductIds: string[] | null = null
