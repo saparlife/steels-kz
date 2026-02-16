@@ -1,5 +1,6 @@
 'use client'
 
+import { COMPANY_PHONE_RAW, COMPANY_WHATSAPP } from '@/lib/constants/company'
 import { Phone } from 'lucide-react'
 
 export function FloatingButtons() {
@@ -7,7 +8,7 @@ export function FloatingButtons() {
     <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
       {/* WhatsApp */}
       <a
-        href="https://wa.me/77001618767"
+        href={`https://wa.me/${COMPANY_WHATSAPP}`}
         target="_blank"
         rel="noopener noreferrer"
         className="w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110"
@@ -24,7 +25,7 @@ export function FloatingButtons() {
 
       {/* Phone */}
       <a
-        href="tel:+77001618767"
+        href={`tel:${COMPANY_PHONE_RAW}`}
         className="w-14 h-14 bg-orange-500 hover:bg-orange-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110"
         aria-label="Позвонить"
       >

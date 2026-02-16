@@ -1,3 +1,4 @@
+import { COMPANY_PHONE } from '@/lib/constants/company'
 import { SchemaOrg } from './SchemaOrg'
 
 interface OrganizationSchemaProps {
@@ -20,7 +21,7 @@ export function OrganizationSchema({
   name = 'Темир Сервис Казахстан',
   url = 'https://temir-service.kz',
   logo = 'https://temir-service.kz/logo.png',
-  phone = '+7 (700) 161-87-67',
+  phone = COMPANY_PHONE,
   email = 'sale@temir-service.kz',
   address = {
     street: 'Проспект Райымбека, 221а/4',
@@ -57,7 +58,7 @@ export function LocalBusinessSchema({
   name = 'Темир Сервис Казахстан',
   description = 'Продажа металлопроката оптом и в розницу в Казахстане',
   url = 'https://temir-service.kz',
-  phone = '+7 (700) 161-87-67',
+  phone = COMPANY_PHONE,
   address = {
     street: 'Проспект Райымбека, 221а/4',
     city: 'Алматы',

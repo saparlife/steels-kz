@@ -1,3 +1,4 @@
+import { COMPANY_PHONE } from '@/lib/constants/company'
 import type { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { LeadForm } from '@/components/blocks/LeadForm'
@@ -165,7 +166,7 @@ export default function OptPage() {
         description="Свяжитесь с нами для получения персонального коммерческого предложения"
         primaryButton={{ text: 'Связаться с нами', href: '/contacts' }}
         secondaryButton={{ text: 'Смотреть каталог', href: '/katalog' }}
-        phone="+7 (700) 161-87-67"
+        phone={COMPANY_PHONE}
       />
     </div>
   )

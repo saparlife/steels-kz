@@ -1,3 +1,4 @@
+import { COMPANY_PHONE } from '@/lib/constants/company'
 import type { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { LeadForm } from '@/components/blocks/LeadForm'
@@ -234,7 +235,7 @@ export default function PartneramPage() {
         title="Есть вопросы о партнерстве?"
         description="Свяжитесь с нашим отделом развития партнерской сети"
         primaryButton={{ text: 'Связаться с нами', href: '/contacts' }}
-        phone="+7 (700) 161-87-67"
+        phone={COMPANY_PHONE}
       />
     </div>
   )

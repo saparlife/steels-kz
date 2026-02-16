@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { localeNames, locales, type Locale } from '@/i18n/config'
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import { cn } from '@/lib/utils'
 import { Menu, Phone, Search, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -49,9 +50,9 @@ export function Header({ locale }: HeaderProps) {
       <div className="bg-gray-900 text-white py-2">
         <div className="container mx-auto px-4 flex items-center justify-between text-sm">
           <div className="flex items-center gap-4">
-            <a href="tel:+77001618767" className="flex items-center gap-2 hover:text-orange-400">
+            <a href={`tel:${COMPANY_PHONE_RAW}`} className="flex items-center gap-2 hover:text-orange-400">
               <Phone className="w-4 h-4" />
-              +7 (700) 161-87-67
+              {COMPANY_PHONE}
             </a>
           </div>
           <div className="flex items-center gap-2">

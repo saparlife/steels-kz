@@ -1,3 +1,4 @@
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import { CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
@@ -71,10 +72,10 @@ export default async function ThankYouPage({ params }: Props) {
               Если у вас есть срочные вопросы, звоните:
             </p>
             <a
-              href="tel:+77001618767"
+              href={`tel:${COMPANY_PHONE_RAW}`}
               className="inline-block text-2xl font-bold text-orange-500 hover:text-orange-600"
             >
-              +7 (700) 161-87-67
+              {COMPANY_PHONE}
             </a>
           </div>
 

@@ -1,3 +1,4 @@
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import {
   Calculator,
   ClipboardCheck,
@@ -154,10 +155,10 @@ export default function ServicesPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+77001618767"
+              href={`tel:${COMPANY_PHONE_RAW}`}
               className="px-8 py-3 bg-white text-orange-500 hover:bg-gray-100 rounded-lg font-semibold transition-colors"
             >
-              Позвонить: +7 (700) 161-87-67
+              Позвонить: {COMPANY_PHONE}
             </a>
             <Link
               href="/contacts"

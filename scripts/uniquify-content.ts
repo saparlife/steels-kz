@@ -1,3 +1,4 @@
+import { COMPANY_PHONE, COMPANY_EMAIL } from '../src/lib/constants/company'
 import { createClient } from '@supabase/supabase-js'
 import * as crypto from 'crypto'
 
@@ -394,7 +395,7 @@ const APPLICATION_TEMPLATES: Record<string, string[]> = {
   ],
 }
 
-const DELIVERY_TEXT = 'Компания «Темир Сервис» осуществляет доставку металлопродукции по Алматы и всему Казахстану. Для заказа и уточнения наличия свяжитесь с нами: +7 (700) 161-87-67, sale@temir-service.kz. Возможен самовывоз со склада.'
+const DELIVERY_TEXT = `Компания «Темир Сервис» осуществляет доставку металлопродукции по Алматы и всему Казахстану. Для заказа и уточнения наличия свяжитесь с нами: ${COMPANY_PHONE}, ${COMPANY_EMAIL}. Возможен самовывоз со склада.`
 
 function generateDescription(
   name: string,

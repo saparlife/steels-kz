@@ -1,3 +1,4 @@
+import { COMPANY_PHONE } from '@/lib/constants/company'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -200,7 +201,7 @@ export default async function GeoCityPage({ params }: Props) {
         title="Готовы сделать заказ?"
         description="Оставьте заявку или позвоните нам прямо сейчас"
         primaryButton={{ text: 'Узнать цену', href: '/uznat-cenu' }}
-        phone={city.phone || '+7 (700) 161-87-67'}
+        phone={city.phone || COMPANY_PHONE}
       />
     </div>
   )

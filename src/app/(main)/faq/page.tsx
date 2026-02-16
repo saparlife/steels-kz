@@ -1,5 +1,6 @@
 'use client'
 
+import { COMPANY_PHONE, COMPANY_PHONE_RAW, COMPANY_WHATSAPP } from '@/lib/constants/company'
 import { ChevronDown, MessageCircle, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -10,7 +11,7 @@ const faqCategories = [
     questions: [
       {
         q: 'Как оформить заказ?',
-        a: 'Оформить заказ можно несколькими способами: позвонить по телефону +7 (700) 161-87-67, отправить заявку через форму на сайте, написать на email sale@temir-service.kz или обратиться в WhatsApp. Наш менеджер свяжется с вами для уточнения деталей и расчета стоимости.',
+        a: `Оформить заказ можно несколькими способами: позвонить по телефону ${COMPANY_PHONE}, отправить заявку через форму на сайте, написать на email sale@temir-service.kz или обратиться в WhatsApp. Наш менеджер свяжется с вами для уточнения деталей и расчета стоимости.`,
       },
       {
         q: 'Какой минимальный объем заказа?',
@@ -68,7 +69,7 @@ const faqCategories = [
       },
       {
         q: 'Как узнать наличие на складе?',
-        a: 'Актуальное наличие можно уточнить у менеджера по телефону +7 (700) 161-87-67 или отправив запрос на email. Информация на сайте обновляется ежедневно.',
+        a: `Актуальное наличие можно уточнить у менеджера по телефону ${COMPANY_PHONE} или отправив запрос на email. Информация на сайте обновляется ежедневно.`,
       },
     ],
   },
@@ -165,14 +166,14 @@ export default function FAQPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+77001618767"
+                href={`tel:${COMPANY_PHONE_RAW}`}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                +7 (700) 161-87-67
+                {COMPANY_PHONE}
               </a>
               <a
-                href="https://wa.me/77001618767"
+                href={`https://wa.me/${COMPANY_WHATSAPP}`}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 <MessageCircle className="w-5 h-5" />

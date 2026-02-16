@@ -1,3 +1,4 @@
+import { COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
@@ -143,7 +144,7 @@ export default async function QuestionsPage() {
         title="Не нашли ответ на свой вопрос?"
         description="Свяжитесь с нами, и мы ответим на любые ваши вопросы"
         primaryButton={{ text: 'Задать вопрос', href: '/contacts' }}
-        secondaryButton={{ text: 'Позвонить', href: 'tel:+77001618767' }}
+        secondaryButton={{ text: 'Позвонить', href: `tel:${COMPANY_PHONE_RAW}` }}
       />
     </div>
   )

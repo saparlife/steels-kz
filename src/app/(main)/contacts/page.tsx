@@ -1,3 +1,4 @@
+import { COMPANY_PHONES, COMPANY_PHONE_RAW, COMPANY_WHATSAPP } from '@/lib/constants/company'
 import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import type { Metadata } from 'next'
 
@@ -10,7 +11,7 @@ const offices = [
   {
     city: 'Алматы (главный офис)',
     address: 'Проспект Райымбека, 221а/4',
-    phone: '+7 (700) 161-87-67',
+    phones: COMPANY_PHONES,
     email: 'sale@temir-service.kz',
     hours: 'Пн-Вс: 9:30-18:30',
     isMain: true,
@@ -38,15 +39,17 @@ export default function ContactsPage() {
       <section className="py-8 bg-orange-500">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-8 text-white">
-            <a href="tel:+77001618767" className="flex items-center gap-2 hover:text-orange-100">
-              <Phone className="w-5 h-5" />
-              <span className="font-semibold">+7 (700) 161-87-67</span>
-            </a>
+            {COMPANY_PHONES.map((p) => (
+              <a key={p.raw} href={`tel:${p.raw}`} className="flex items-center gap-2 hover:text-orange-100">
+                <Phone className="w-5 h-5" />
+                <span className="font-semibold">{p.display}</span>
+              </a>
+            ))}
             <a href="mailto:sale@temir-service.kz" className="flex items-center gap-2 hover:text-orange-100">
               <Mail className="w-5 h-5" />
               <span className="font-semibold">sale@temir-service.kz</span>
             </a>
-            <a href="https://wa.me/77001618767" className="flex items-center gap-2 hover:text-orange-100">
+            <a href={`https://wa.me/${COMPANY_WHATSAPP}`} className="flex items-center gap-2 hover:text-orange-100">
               <MessageCircle className="w-5 h-5" />
               <span className="font-semibold">WhatsApp</span>
             </a>
@@ -146,15 +149,17 @@ export default function ContactsPage() {
                         <MapPin className={`w-4 h-4 mt-0.5 ${office.isMain ? 'text-orange-200' : 'text-gray-400'}`} />
                         <span className={office.isMain ? 'text-orange-100' : 'text-gray-600'}>{office.address}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Phone className={`w-4 h-4 ${office.isMain ? 'text-orange-200' : 'text-gray-400'}`} />
-                        <a
-                          href={`tel:${office.phone.replace(/\D/g, '')}`}
-                          className={`hover:underline ${office.isMain ? 'text-white' : 'text-gray-900'}`}
-                        >
-                          {office.phone}
-                        </a>
-                      </div>
+                      {office.phones.map((p) => (
+                        <div key={p.raw} className="flex items-center gap-2">
+                          <Phone className={`w-4 h-4 ${office.isMain ? 'text-orange-200' : 'text-gray-400'}`} />
+                          <a
+                            href={`tel:${p.raw}`}
+                            className={`hover:underline ${office.isMain ? 'text-white' : 'text-gray-900'}`}
+                          >
+                            {p.display}
+                          </a>
+                        </div>
+                      ))}
                       <div className="flex items-center gap-2">
                         <Mail className={`w-4 h-4 ${office.isMain ? 'text-orange-200' : 'text-gray-400'}`} />
                         <a

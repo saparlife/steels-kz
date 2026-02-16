@@ -1,3 +1,4 @@
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import { CheckCircle, Clock, MapPin, Shield, Truck } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -219,10 +220,10 @@ export default function DeliveryPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+77001618767"
+              href={`tel:${COMPANY_PHONE_RAW}`}
               className="px-8 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold transition-colors"
             >
-              +7 (700) 161-87-67
+              {COMPANY_PHONE}
             </a>
             <Link
               href="/contacts"

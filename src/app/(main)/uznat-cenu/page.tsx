@@ -1,3 +1,4 @@
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import type { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { LeadForm } from '@/components/blocks/LeadForm'
@@ -97,11 +98,11 @@ export default function UznatCenuPage() {
                   Наши специалисты готовы ответить на ваши вопросы
                 </p>
                 <a
-                  href="tel:+77001618767"
+                  href={`tel:${COMPANY_PHONE_RAW}`}
                   className="inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700"
                 >
                   <Phone className="w-5 h-5" />
-                  +7 (700) 161-87-67
+                  {COMPANY_PHONE}
                 </a>
               </div>
             </div>

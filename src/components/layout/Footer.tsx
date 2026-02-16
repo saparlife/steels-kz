@@ -1,5 +1,6 @@
 'use client'
 
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -44,9 +45,9 @@ export function Footer() {
               Крупнейший поставщик металлопроката в Казахстане
             </p>
             <div className="space-y-2 text-sm">
-              <a href="tel:+77001618767" className="flex items-center gap-2 hover:text-orange-400">
+              <a href={`tel:${COMPANY_PHONE_RAW}`} className="flex items-center gap-2 hover:text-orange-400">
                 <Phone className="w-4 h-4" />
-                +7 (700) 161-87-67
+                {COMPANY_PHONE}
               </a>
               <a href="mailto:sale@temir-service.kz" className="flex items-center gap-2 hover:text-orange-400">
                 <Mail className="w-4 h-4" />

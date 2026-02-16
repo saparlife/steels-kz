@@ -1,3 +1,4 @@
+import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -98,7 +99,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="text-gray-600 mb-6 space-y-2">
                 <li>Email: <a href="mailto:sale@temir-service.kz" className="text-orange-500 hover:underline">sale@temir-service.kz</a></li>
-                <li>Телефон: <a href="tel:+77001618767" className="text-orange-500 hover:underline">+7 (700) 161-87-67</a></li>
+                <li>Телефон: <a href={`tel:${COMPANY_PHONE_RAW}`} className="text-orange-500 hover:underline">{COMPANY_PHONE}</a></li>
                 <li>Адрес: г. Алматы, Проспект Райымбека, 221а/4</li>
               </ul>
 
