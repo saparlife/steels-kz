@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const inter = Inter({
@@ -76,6 +77,20 @@ export default async function RootLayout({
 
   return (
     <html lang={locale === 'kz' ? 'kk' : 'ru'} className={inter.variable}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PEK7GCC8T0"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PEK7GCC8T0');
+          `}
+        </Script>
+      </head>
       <body className="min-h-screen bg-gray-50 font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}
