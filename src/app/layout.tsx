@@ -54,6 +54,10 @@ export const metadata: Metadata = {
     title: 'Темир Сервис Казахстан',
     description: 'Крупнейший поставщик металлопроката в Казахстане',
   },
+  verification: {
+    google: 'u0F3pBkaLWlOt6QkMQ-LdFaRQ2lbfwaaRARZnbhY2fE',
+    yandex: '107085420',
+  },
   robots: {
     index: true,
     follow: true,
@@ -99,6 +103,16 @@ export default async function RootLayout({
             })(window,document,'script','dataLayer','GTM-MFLSC42D');
           `}
         </Script>
+        <Script id="yandex-metrika" strategy="afterInteractive">
+          {`
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+            })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107085420', 'ym');
+            ym(107085420, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+          `}
+        </Script>
       </head>
       <body className="min-h-screen bg-gray-50 font-sans antialiased">
         <noscript>
@@ -108,6 +122,11 @@ export default async function RootLayout({
             width="0"
             style={{ display: 'none', visibility: 'hidden' }}
           />
+        </noscript>
+        <noscript>
+          <div>
+            <img src="https://mc.yandex.ru/watch/107085420" style={{ position: 'absolute', left: '-9999px' }} alt="" />
+          </div>
         </noscript>
         <NextIntlClientProvider messages={messages}>
           {children}
