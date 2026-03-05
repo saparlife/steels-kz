@@ -17,8 +17,21 @@ export function HeroSection({ title, subtitle }: HeroSectionProps) {
 
   return (
     <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 md:py-28 overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Geometric metal-like background pattern */}
+      <div className="absolute inset-0">
+        <svg className="absolute inset-0 w-full h-full opacity-[0.07]" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="metal-grid" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+              <line x1="0" y1="0" x2="0" y2="60" stroke="white" strokeWidth="0.5" />
+              <line x1="0" y1="0" x2="60" y2="0" stroke="white" strokeWidth="0.5" />
+            </pattern>
+            <pattern id="diagonal-lines" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+              <line x1="0" y1="0" x2="0" y2="40" stroke="white" strokeWidth="0.3" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#metal-grid)" />
+          <rect width="100%" height="100%" fill="url(#diagonal-lines)" />
+        </svg>
         <div className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-1/2 -left-1/4 w-[400px] h-[400px] bg-orange-500/5 rounded-full blur-3xl" />
       </div>
