@@ -4,8 +4,8 @@ import type { Database } from '@/types/database'
 
 type LeadInsert = Database['public']['Tables']['leads']['Insert']
 
-const TELEGRAM_BOT_TOKEN = '8515180230:AAGQ245g3WVa8DlfRTDE421DR-0XVHBMRCc'
-const TELEGRAM_CHAT_ID = '-5264341898'
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!
 
 async function sendTelegramNotification(lead: {
   type: string
