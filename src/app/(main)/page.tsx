@@ -1,4 +1,6 @@
 import { CategoryCard } from '@/components/catalog/CategoryCard'
+import { HeroSection } from '@/components/home/HeroSection'
+import { StatsCounter } from '@/components/home/StatsCounter'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedField } from '@/lib/utils'
@@ -58,56 +60,17 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero section */}
-      <section className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {t('title')}
-            </h1>
-            <p className="text-xl text-gray-300 mb-8">
-              {t('subtitle')}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="/katalog"
-                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-colors"
-              >
-                Перейти в каталог
-              </Link>
-              <Link
-                href="/uznat-cenu"
-                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium rounded-lg border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-colors"
-              >
-                Получить консультацию
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection title={t('title')} subtitle={t('subtitle')} />
 
       {/* Stats */}
-      <section className="bg-orange-500 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl md:text-4xl font-bold">183 000+</div>
-              <div className="text-orange-100">{t('stats.products')}</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold">5 000+</div>
-              <div className="text-orange-100">{t('stats.clients')}</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold">555 500</div>
-              <div className="text-orange-100">{t('stats.delivered')}</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold">15+</div>
-              <div className="text-orange-100">{t('stats.experience')}</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <StatsCounter
+        items={[
+          { value: 183000, suffix: '+', label: t('stats.products') },
+          { value: 5000, suffix: '+', label: t('stats.clients') },
+          { value: 555500, suffix: '', label: t('stats.delivered') },
+          { value: 15, suffix: '+', label: t('stats.experience') },
+        ]}
+      />
 
       {/* Categories */}
       <section className="py-12">
