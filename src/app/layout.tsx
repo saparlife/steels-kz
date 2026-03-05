@@ -48,11 +48,20 @@ export const metadata: Metadata = {
     siteName: 'Темир Сервис Казахстан',
     title: 'Темир Сервис Казахстан - Металлопрокат в Казахстане',
     description: 'Крупнейший поставщик металлопроката в Казахстане',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1080,
+        height: 1080,
+        alt: 'Темир Сервис Казахстан',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Темир Сервис Казахстан',
     description: 'Крупнейший поставщик металлопроката в Казахстане',
+    images: ['/og-image.png'],
   },
   verification: {
     google: 'u0F3pBkaLWlOt6QkMQ-LdFaRQ2lbfwaaRARZnbhY2fE',
