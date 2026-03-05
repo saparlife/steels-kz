@@ -3,6 +3,7 @@
 import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -38,9 +39,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company info */}
           <div>
-            <div className="text-2xl font-bold text-white mb-4">
-              ТЕМИР<span className="text-orange-500">СЕРВИС</span>
-            </div>
+            <Image
+              src="/logo-white.svg"
+              alt="Темир Сервис"
+              width={180}
+              height={50}
+              className="mb-4"
+            />
             <p className="text-sm mb-4">
               Крупнейший поставщик металлопроката в Казахстане
             </p>

@@ -7,6 +7,7 @@ import { COMPANY_PHONE, COMPANY_PHONE_RAW } from '@/lib/constants/company'
 import { cn } from '@/lib/utils'
 import { Menu, Phone, Search, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -77,9 +78,13 @@ export function Header({ locale }: HeaderProps) {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <div className="text-2xl font-bold text-gray-900">
-              ТЕМИР<span className="text-orange-500">СЕРВИС</span>
-            </div>
+            <Image
+              src="/logo.svg"
+              alt="Темир Сервис"
+              width={180}
+              height={50}
+              priority
+            />
           </Link>
 
           {/* Desktop search */}
