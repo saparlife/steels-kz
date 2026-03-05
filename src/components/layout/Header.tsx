@@ -82,7 +82,7 @@ export function Header({ locale }: HeaderProps) {
               src="/logo.svg"
               alt="Темир Сервис"
               width={180}
-              height={50}
+              height={60}
               priority
             />
           </Link>

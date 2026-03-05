@@ -43,7 +43,7 @@ export function Footer() {
               src="/logo-white.svg"
               alt="Темир Сервис"
               width={180}
-              height={50}
+              height={60}
               className="mb-4"
             />
             <p className="text-sm mb-4">
