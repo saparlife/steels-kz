@@ -4,15 +4,16 @@ import { StatsCounter } from '@/components/home/StatsCounter'
 import { type Locale } from '@/i18n/config'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedField } from '@/lib/utils'
-import type { Category, Review, FAQ, SiteSetting } from '@/types/database'
+import type { Category, Review, FAQ, SiteSetting, Page } from '@/types/database'
 import { Award, Clock, Package, Truck } from 'lucide-react'
+import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 
 async function getHomeData() {
   const supabase = await createClient()
 
-  const [categoriesRes, reviewsRes, faqRes, settingsRes] = await Promise.all([
+  const [categoriesRes, reviewsRes, faqRes, settingsRes, pageRes] = await Promise.all([
     supabase
       .from('categories')
       .select('*')
@@ -35,6 +36,11 @@ async function getHomeData() {
     supabase
       .from('site_settings')
       .select('*'),
+    supabase
+      .from('pages')
+      .select('*')
+      .eq('slug', 'home')
+      .single(),
   ])
 
   return {
@@ -42,13 +48,34 @@ async function getHomeData() {
     reviews: (reviewsRes.data || []) as Review[],
     faq: (faqRes.data || []) as FAQ[],
     settings: (settingsRes.data || []) as SiteSetting[],
+    page: (pageRes.data || null) as Page | null,
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('pages')
+    .select('*')
+    .eq('slug', 'home')
+    .single()
+
+  const page = data as Page | null
+
+  if (page?.meta_title_ru || page?.meta_description_ru) {
+    return {
+      title: page.meta_title_ru || undefined,
+      description: page.meta_description_ru || undefined,
+    }
+  }
+
+  return {}
 }
 
 export default async function HomePage() {
   const locale = await getLocale() as Locale
   const t = await getTranslations('home')
-  const { categories, reviews, faq } = await getHomeData()
+  const { categories, reviews, faq, page } = await getHomeData()
 
   const whyUsItems = [
     { icon: Award, key: 'quality' as const },
@@ -207,6 +234,15 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* SEO content */}
+      {page?.content_ru && (
+        <section className="py-12">
+          <div className="container mx-auto px-4 prose max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: page.content_ru }} />
+          </div>
+        </section>
+      )}
     </div>
   )
 }

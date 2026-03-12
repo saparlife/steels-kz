@@ -55,6 +55,8 @@ export async function PUT(
       meta_title_kz: body.meta_title_kz || null,
       meta_description_ru: body.meta_description_ru || null,
       meta_description_kz: body.meta_description_kz || null,
+      seo_text_ru: body.seo_text_ru || null,
+      seo_text_kz: body.seo_text_kz || null,
       image_url: body.image_url || null,
       icon_url: body.icon_url || null,
       sort_order: body.sort_order || 0,

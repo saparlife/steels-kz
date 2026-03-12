@@ -22,6 +22,8 @@ export interface Database {
           meta_title_kz: string | null
           meta_description_ru: string | null
           meta_description_kz: string | null
+          seo_text_ru: string | null
+          seo_text_kz: string | null
           image_url: string | null
           icon_url: string | null
           sort_order: number
@@ -44,6 +46,8 @@ export interface Database {
           meta_title_kz?: string | null
           meta_description_ru?: string | null
           meta_description_kz?: string | null
+          seo_text_ru?: string | null
+          seo_text_kz?: string | null
           image_url?: string | null
           icon_url?: string | null
           sort_order?: number
@@ -66,6 +70,8 @@ export interface Database {
           meta_title_kz?: string | null
           meta_description_ru?: string | null
           meta_description_kz?: string | null
+          seo_text_ru?: string | null
+          seo_text_kz?: string | null
           image_url?: string | null
           icon_url?: string | null
           sort_order?: number

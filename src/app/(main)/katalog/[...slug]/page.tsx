@@ -486,10 +486,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       )}
 
       {/* SEO content */}
-      {category.description_ru && (
+      {category.seo_text_ru && (
         <div className="mt-12 prose max-w-none">
-          <h2>Описание</h2>
-          <div dangerouslySetInnerHTML={{ __html: category.description_ru }} />
+          <div dangerouslySetInnerHTML={{ __html: category.seo_text_ru }} />
         </div>
       )}
     </div>

@@ -33,6 +33,8 @@ export default function NewCategoryPage() {
     meta_title_kz: '',
     meta_description_ru: '',
     meta_description_kz: '',
+    seo_text_ru: '',
+    seo_text_kz: '',
     image_url: null as string | null,
     icon_url: null as string | null,
     sort_order: 0,
@@ -197,6 +199,32 @@ export default function NewCategoryPage() {
             value={formData.meta_description_kz}
             onChange={(e) => setFormData(prev => ({ ...prev, meta_description_kz: e.target.value }))}
           />
+
+          <div className="pt-4 border-t">
+            <h3 className="text-sm font-medium text-gray-700 mb-1">SEO текст (RU)</h3>
+            <p className="text-xs text-gray-500 mb-2">HTML-контент для SEO. Поддерживает теги: h1-h6, p, ul, ol, li, a, strong, em, table и др.</p>
+            <textarea
+              id="seo_text_ru"
+              rows={10}
+              value={formData.seo_text_ru}
+              onChange={(e) => setFormData(prev => ({ ...prev, seo_text_ru: e.target.value }))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 font-mono text-sm"
+              placeholder="<h2>Заголовок</h2><p>Текст...</p>"
+            />
+          </div>
+
+          <div>
+            <h3 className="text-sm font-medium text-gray-700 mb-1">SEO текст (KZ)</h3>
+            <p className="text-xs text-gray-500 mb-2">HTML-контент для SEO на казахском языке</p>
+            <textarea
+              id="seo_text_kz"
+              rows={10}
+              value={formData.seo_text_kz}
+              onChange={(e) => setFormData(prev => ({ ...prev, seo_text_kz: e.target.value }))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 font-mono text-sm"
+              placeholder="<h2>Тақырып</h2><p>Мәтін...</p>"
+            />
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
