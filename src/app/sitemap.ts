@@ -86,13 +86,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // Dynamic: Products (limit to most recent 1000 for performance)
-  const { data: products } = await supabase
-    .from('products')
-    .select('slug, category_id, updated_at, categories!inner(slug)')
-    .eq('is_active', true)
-    .order('updated_at', { ascending: false })
-    .limit(1000) as { data: (SlugWithDate & { categories: { slug: string } })[] | null }
+  // Dynamic: Products — fetch ALL active products in batches (Supabase caps at 1000 per request)
+  const products: (SlugWithDate & { categories: { slug: string } })[] = []
+  const BATCH_SIZE = 1000
+  let from = 0
+  while (true) {
+    const { data: batch } = await supabase
+      .from('products')
+      .select('slug, category_id, updated_at, categories!inner(slug)')
+      .eq('is_active', true)
+      .order('updated_at', { ascending: false })
+      .range(from, from + BATCH_SIZE - 1) as { data: (SlugWithDate & { categories: { slug: string } })[] | null }
+
+    if (!batch || batch.length === 0) break
+    products.push(...batch)
+    if (batch.length < BATCH_SIZE) break
+    from += BATCH_SIZE
+  }
 
   const productPages: MetadataRoute.Sitemap = (products || []).map((product) => {
     const categorySlug = product.categories?.slug || 'product'

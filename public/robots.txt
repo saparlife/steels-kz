@@ -13,12 +13,8 @@ Disallow: /login
 Disallow: /register
 Disallow: /reset-password
 
-# Disallow pagination and filter parameters
-Disallow: /katalog/*?*page=
-Disallow: /katalog/*?*sort=
+# Disallow filter parameters (pagination is kept open so crawlers can reach all products)
 Disallow: /katalog/*?*filter=
-Disallow: /*?page=*
-Disallow: /*?sort=*
 
 # Disallow search with parameters
 Disallow: /search?*
