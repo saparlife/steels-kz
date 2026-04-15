@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
 
 export const revalidate = 3600 // cache sitemap for 1 hour
 export const maxDuration = 60 // Vercel function timeout (seconds)
@@ -15,46 +14,80 @@ interface SlugItem { slug: string }
 interface SlugWithDate { slug: string; updated_at?: string | null; created_at?: string | null; published_at?: string | null }
 interface ProductRow { slug: string; updated_at: string | null }
 
-// generateSitemaps tells Next.js to produce a sitemap index with one entry per id.
-// Next.js serves the index at /sitemap.xml and each chunk at /sitemap/<id>.xml.
-// id=0 holds static pages + all non-product dynamic content (categories, news, etc).
-// id>=1 holds product URLs in PRODUCTS_PER_SITEMAP-sized chunks.
-export async function generateSitemaps() {
-  const supabase = await createClient()
-  const { count } = await supabase
-    .from('products')
-    .select('id', { count: 'exact', head: true })
-    .eq('is_active', true)
+// Direct PostgREST calls (no supabase/ssr client) — generateSitemaps runs at
+// build time, outside any request scope, so the cookie-bound server client
+// cannot be used here.
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-  const total = count ?? 0
-  const productChunks = Math.max(1, Math.ceil(total / PRODUCTS_PER_SITEMAP))
-  // id 0 = meta/static/categories/etc; ids 1..N = product chunks
-  return Array.from({ length: productChunks + 1 }, (_, i) => ({ id: i }))
+async function fetchRows<T>(path: string): Promise<T[]> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+    },
+    cache: 'no-store',
+  })
+  if (!res.ok) return []
+  return (await res.json()) as T[]
+}
+
+async function countActiveProducts(): Promise<number> {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/products?select=id&is_active=eq.true`,
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        Prefer: 'count=exact',
+        Range: '0-0',
+      },
+      cache: 'no-store',
+    }
+  )
+  const range = res.headers.get('content-range') // "0-0/183725"
+  const total = range?.split('/')?.[1]
+  return total ? Number(total) : 0
 }
 
 async function fetchProductChunk(chunkIndex: number): Promise<ProductRow[]> {
-  const supabase = await createClient()
   const start = chunkIndex * PRODUCTS_PER_SITEMAP
   const end = start + PRODUCTS_PER_SITEMAP - 1
   const rows: ProductRow[] = []
   const BATCH = 1000
 
-  // Supabase caps per-request rows at 1000, so fan the chunk into BATCH-sized reads.
   for (let offset = start; offset <= end; offset += BATCH) {
     const upper = Math.min(offset + BATCH - 1, end)
-    const { data } = await supabase
-      .from('products')
-      .select('slug, updated_at')
-      .eq('is_active', true)
-      .order('id', { ascending: true })
-      .range(offset, upper) as { data: ProductRow[] | null }
-
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/products?select=slug,updated_at&is_active=eq.true&order=id.asc`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          Range: `${offset}-${upper}`,
+          'Range-Unit': 'items',
+        },
+        cache: 'no-store',
+      }
+    )
+    if (!res.ok) break
+    const data = (await res.json()) as ProductRow[]
     if (!data || data.length === 0) break
     rows.push(...data)
     if (data.length < upper - offset + 1) break
   }
 
   return rows
+}
+
+// generateSitemaps tells Next.js to produce a sitemap index with one entry per id.
+// Next.js serves the index at /sitemap.xml and each chunk at /sitemap/<id>.xml.
+// id=0 holds static pages + all non-product dynamic content (categories, news, etc).
+// id>=1 holds product URLs in PRODUCTS_PER_SITEMAP-sized chunks.
+export async function generateSitemaps() {
+  const total = await countActiveProducts()
+  const productChunks = Math.max(1, Math.ceil(total / PRODUCTS_PER_SITEMAP))
+  return Array.from({ length: productChunks + 1 }, (_, i) => ({ id: i }))
 }
 
 export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
@@ -70,8 +103,6 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
   }
 
   // id === 0: static pages + all non-product dynamic content
-  const supabase = await createClient()
-
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     // Main pages
@@ -135,166 +166,109 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
     { url: `${SITE_URL}/questions`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
   ]
 
-  // Dynamic: Categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('slug, updated_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
+  // Load all non-product dynamic tables in parallel
+  const [
+    categories,
+    news,
+    brands,
+    manufacturers,
+    cities,
+    gosts,
+    steelGrades,
+    glossary,
+    guides,
+    cases,
+    faqCategories,
+    offers,
+  ] = await Promise.all([
+    fetchRows<SlugWithDate>('categories?select=slug,updated_at&is_active=eq.true'),
+    fetchRows<SlugWithDate>('news?select=slug,updated_at&is_published=eq.true&order=published_at.desc&limit=100'),
+    fetchRows<SlugWithDate>('brands?select=slug,created_at&is_active=eq.true'),
+    fetchRows<SlugWithDate>('manufacturers?select=slug,created_at&is_active=eq.true'),
+    fetchRows<SlugItem>('cities?select=slug&is_active=eq.true'),
+    fetchRows<SlugWithDate>('gost_standards?select=slug,created_at&is_active=eq.true'),
+    fetchRows<SlugWithDate>('steel_grades?select=slug,created_at&is_active=eq.true'),
+    fetchRows<SlugWithDate>('glossary_terms?select=slug,created_at&is_active=eq.true'),
+    fetchRows<SlugWithDate>('guides?select=slug,published_at&is_active=eq.true'),
+    fetchRows<SlugWithDate>('cases?select=slug,published_at&is_active=eq.true'),
+    fetchRows<SlugItem>('faq_categories?select=slug&is_active=eq.true'),
+    fetchRows<SlugWithDate>('special_offers?select=slug,created_at&is_active=eq.true'),
+  ])
 
-  const categoryPages: MetadataRoute.Sitemap = (categories || []).map((cat) => ({
+  const categoryPages: MetadataRoute.Sitemap = categories.map((cat) => ({
     url: `${SITE_URL}/katalog/${cat.slug}`,
     lastModified: cat.updated_at ? new Date(cat.updated_at) : new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.8,
   }))
 
-  // Products live in separate sitemap chunks (see generateSitemaps / fetchProductChunk above)
-
-  // Dynamic: News
-  const { data: news } = await supabase
-    .from('news')
-    .select('slug, updated_at')
-    .eq('is_published', true)
-    .order('published_at', { ascending: false })
-    .limit(100) as { data: SlugWithDate[] | null }
-
-  const newsPages: MetadataRoute.Sitemap = (news || []).map((item) => ({
+  const newsPages: MetadataRoute.Sitemap = news.map((item) => ({
     url: `${SITE_URL}/news/${item.slug}`,
     lastModified: item.updated_at ? new Date(item.updated_at) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.5,
   }))
 
-  // Dynamic: Brands
-  const { data: brands } = await supabase
-    .from('brands')
-    .select('slug, created_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const brandPages: MetadataRoute.Sitemap = (brands || []).map((brand) => ({
+  const brandPages: MetadataRoute.Sitemap = brands.map((brand) => ({
     url: `${SITE_URL}/brendy/${brand.slug}`,
     lastModified: brand.created_at ? new Date(brand.created_at) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
 
-  // Dynamic: Manufacturers
-  const { data: manufacturers } = await supabase
-    .from('manufacturers')
-    .select('slug, created_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const manufacturerPages: MetadataRoute.Sitemap = (manufacturers || []).map((m) => ({
+  const manufacturerPages: MetadataRoute.Sitemap = manufacturers.map((m) => ({
     url: `${SITE_URL}/proizvoditeli/${m.slug}`,
     lastModified: m.created_at ? new Date(m.created_at) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
 
-  // Dynamic: Cities (geo)
-  const { data: cities } = await supabase
-    .from('cities')
-    .select('slug')
-    .eq('is_active', true) as { data: SlugItem[] | null }
-
-  const cityPages: MetadataRoute.Sitemap = (cities || []).flatMap((city) => [
-    {
-      url: `${SITE_URL}/geo/${city.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-    {
-      url: `${SITE_URL}/sklad/${city.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
+  const cityPages: MetadataRoute.Sitemap = cities.flatMap((city) => [
+    { url: `${SITE_URL}/geo/${city.slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
+    { url: `${SITE_URL}/sklad/${city.slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
   ])
 
-  // Dynamic: GOST
-  const { data: gosts } = await supabase
-    .from('gost_standards')
-    .select('slug, created_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const gostPages: MetadataRoute.Sitemap = (gosts || []).map((gost) => ({
+  const gostPages: MetadataRoute.Sitemap = gosts.map((gost) => ({
     url: `${SITE_URL}/data/gost/${gost.slug}`,
     lastModified: gost.created_at ? new Date(gost.created_at) : new Date(),
     changeFrequency: 'yearly' as const,
     priority: 0.5,
   }))
 
-  // Dynamic: Steel grades
-  const { data: steelGrades } = await supabase
-    .from('steel_grades')
-    .select('slug, created_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const steelGradePages: MetadataRoute.Sitemap = (steelGrades || []).map((sg) => ({
+  const steelGradePages: MetadataRoute.Sitemap = steelGrades.map((sg) => ({
     url: `${SITE_URL}/data/marki-stali/${sg.slug}`,
     lastModified: sg.created_at ? new Date(sg.created_at) : new Date(),
     changeFrequency: 'yearly' as const,
     priority: 0.5,
   }))
 
-  // Dynamic: Glossary
-  const { data: glossary } = await supabase
-    .from('glossary_terms')
-    .select('slug, created_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const glossaryPages: MetadataRoute.Sitemap = (glossary || []).map((term) => ({
+  const glossaryPages: MetadataRoute.Sitemap = glossary.map((term) => ({
     url: `${SITE_URL}/glossary/${term.slug}`,
     lastModified: term.created_at ? new Date(term.created_at) : new Date(),
     changeFrequency: 'yearly' as const,
     priority: 0.4,
   }))
 
-  // Dynamic: Guides
-  const { data: guides } = await supabase
-    .from('guides')
-    .select('slug, published_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const guidePages: MetadataRoute.Sitemap = (guides || []).map((guide) => ({
+  const guidePages: MetadataRoute.Sitemap = guides.map((guide) => ({
     url: `${SITE_URL}/guides/${guide.slug}`,
     lastModified: guide.published_at ? new Date(guide.published_at) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
 
-  // Dynamic: Cases
-  const { data: cases } = await supabase
-    .from('cases')
-    .select('slug, published_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
-
-  const casePages: MetadataRoute.Sitemap = (cases || []).map((c) => ({
+  const casePages: MetadataRoute.Sitemap = cases.map((c) => ({
     url: `${SITE_URL}/cases/${c.slug}`,
     lastModified: c.published_at ? new Date(c.published_at) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.5,
   }))
 
-  // Dynamic: FAQ categories
-  const { data: faqCategories } = await supabase
-    .from('faq_categories')
-    .select('slug')
-    .eq('is_active', true) as { data: SlugItem[] | null }
-
-  const faqPages: MetadataRoute.Sitemap = (faqCategories || []).map((cat) => ({
+  const faqPages: MetadataRoute.Sitemap = faqCategories.map((cat) => ({
     url: `${SITE_URL}/faq/${cat.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.5,
   }))
-
-  // Dynamic: Special offers
-  const { data: offers } = await supabase
-    .from('special_offers')
-    .select('slug, created_at')
-    .eq('is_active', true) as { data: SlugWithDate[] | null }
 
   const offerPages: MetadataRoute.Sitemap = [
     {
@@ -303,7 +277,7 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
       changeFrequency: 'daily' as const,
       priority: 0.7,
     },
-    ...(offers || []).map((offer) => ({
+    ...offers.map((offer) => ({
       url: `${SITE_URL}/katalog/special-offer/${offer.slug}`,
       lastModified: offer.created_at ? new Date(offer.created_at) : new Date(),
       changeFrequency: 'weekly' as const,
