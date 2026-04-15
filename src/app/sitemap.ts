@@ -6,11 +6,70 @@ export const maxDuration = 60 // Vercel function timeout (seconds)
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://temir-service.kz'
 
+// Chunk size for product sitemaps. Google caps a single sitemap at 50k URLs;
+// we stay under that and keep each function invocation well under maxDuration.
+const PRODUCTS_PER_SITEMAP = 40000
+
 // Simple interfaces for sitemap data
 interface SlugItem { slug: string }
 interface SlugWithDate { slug: string; updated_at?: string | null; created_at?: string | null; published_at?: string | null }
+interface ProductRow { slug: string; updated_at: string | null }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+// generateSitemaps tells Next.js to produce a sitemap index with one entry per id.
+// Next.js serves the index at /sitemap.xml and each chunk at /sitemap/<id>.xml.
+// id=0 holds static pages + all non-product dynamic content (categories, news, etc).
+// id>=1 holds product URLs in PRODUCTS_PER_SITEMAP-sized chunks.
+export async function generateSitemaps() {
+  const supabase = await createClient()
+  const { count } = await supabase
+    .from('products')
+    .select('id', { count: 'exact', head: true })
+    .eq('is_active', true)
+
+  const total = count ?? 0
+  const productChunks = Math.max(1, Math.ceil(total / PRODUCTS_PER_SITEMAP))
+  // id 0 = meta/static/categories/etc; ids 1..N = product chunks
+  return Array.from({ length: productChunks + 1 }, (_, i) => ({ id: i }))
+}
+
+async function fetchProductChunk(chunkIndex: number): Promise<ProductRow[]> {
+  const supabase = await createClient()
+  const start = chunkIndex * PRODUCTS_PER_SITEMAP
+  const end = start + PRODUCTS_PER_SITEMAP - 1
+  const rows: ProductRow[] = []
+  const BATCH = 1000
+
+  // Supabase caps per-request rows at 1000, so fan the chunk into BATCH-sized reads.
+  for (let offset = start; offset <= end; offset += BATCH) {
+    const upper = Math.min(offset + BATCH - 1, end)
+    const { data } = await supabase
+      .from('products')
+      .select('slug, updated_at')
+      .eq('is_active', true)
+      .order('id', { ascending: true })
+      .range(offset, upper) as { data: ProductRow[] | null }
+
+    if (!data || data.length === 0) break
+    rows.push(...data)
+    if (data.length < upper - offset + 1) break
+  }
+
+  return rows
+}
+
+export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
+  // Product chunk sitemaps
+  if (id >= 1) {
+    const products = await fetchProductChunk(id - 1)
+    return products.map((product) => ({
+      url: `${SITE_URL}/product/${product.slug}`,
+      lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }))
+  }
+
+  // id === 0: static pages + all non-product dynamic content
   const supabase = await createClient()
 
   // Static pages
@@ -89,36 +148,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // Dynamic: Products — fetch all active products in batches (Supabase caps at 1000 per request).
-  // No join: we use /product/<slug> as the canonical product URL, which avoids an expensive
-  // per-batch join on category slug.
-  interface ProductRow { slug: string; updated_at: string | null }
-  const products: ProductRow[] = []
-  const BATCH_SIZE = 1000
-  const MAX_PRODUCTS = 45000 // single sitemap.xml limit (Google caps at 50k URLs)
-  let from = 0
-  while (from < MAX_PRODUCTS) {
-    const { data: batch } = await supabase
-      .from('products')
-      .select('slug, updated_at')
-      .eq('is_active', true)
-      .order('updated_at', { ascending: false })
-      .range(from, from + BATCH_SIZE - 1) as { data: ProductRow[] | null }
-
-    if (!batch || batch.length === 0) break
-    products.push(...batch)
-    if (batch.length < BATCH_SIZE) break
-    from += BATCH_SIZE
-  }
-
-  const productPages: MetadataRoute.Sitemap = products.map((product) => {
-    return {
-      url: `${SITE_URL}/product/${product.slug}`,
-      lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }
-  })
+  // Products live in separate sitemap chunks (see generateSitemaps / fetchProductChunk above)
 
   // Dynamic: News
   const { data: news } = await supabase
@@ -284,7 +314,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticPages,
     ...categoryPages,
-    ...productPages,
     ...newsPages,
     ...brandPages,
     ...manufacturerPages,
