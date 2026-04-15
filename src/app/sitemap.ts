@@ -1,6 +1,9 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
 
+export const revalidate = 3600 // cache sitemap for 1 hour
+export const maxDuration = 60 // Vercel function timeout (seconds)
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://temir-service.kz'
 
 // Simple interfaces for sitemap data
@@ -86,17 +89,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // Dynamic: Products — fetch ALL active products in batches (Supabase caps at 1000 per request)
-  const products: (SlugWithDate & { categories: { slug: string } })[] = []
+  // Dynamic: Products — fetch all active products in batches (Supabase caps at 1000 per request).
+  // No join: we use /product/<slug> as the canonical product URL, which avoids an expensive
+  // per-batch join on category slug.
+  interface ProductRow { slug: string; updated_at: string | null }
+  const products: ProductRow[] = []
   const BATCH_SIZE = 1000
+  const MAX_PRODUCTS = 45000 // single sitemap.xml limit (Google caps at 50k URLs)
   let from = 0
-  while (true) {
+  while (from < MAX_PRODUCTS) {
     const { data: batch } = await supabase
       .from('products')
-      .select('slug, category_id, updated_at, categories!inner(slug)')
+      .select('slug, updated_at')
       .eq('is_active', true)
       .order('updated_at', { ascending: false })
-      .range(from, from + BATCH_SIZE - 1) as { data: (SlugWithDate & { categories: { slug: string } })[] | null }
+      .range(from, from + BATCH_SIZE - 1) as { data: ProductRow[] | null }
 
     if (!batch || batch.length === 0) break
     products.push(...batch)
@@ -104,10 +111,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     from += BATCH_SIZE
   }
 
-  const productPages: MetadataRoute.Sitemap = (products || []).map((product) => {
-    const categorySlug = product.categories?.slug || 'product'
+  const productPages: MetadataRoute.Sitemap = products.map((product) => {
     return {
-      url: `${SITE_URL}/katalog/${categorySlug}/${product.slug}`,
+      url: `${SITE_URL}/product/${product.slug}`,
       lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
