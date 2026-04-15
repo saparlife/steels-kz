@@ -1,13 +1,17 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://temir-service.kz'
 
-// Keep chunks small enough that fetching one completes well under Vercel's
-// 60s function timeout even if the DB is slow. 10k / 1000 = 10 parallel
-// PostgREST reads per chunk, each finishing in < 2s → ~5s worst case.
+// Target products per sitemap (approximate — chunks are split on UUID prefix
+// so sizes vary slightly). Google allows up to 50k per sitemap.
 export const PRODUCTS_PER_SITEMAP = 10000
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Use service role key: high-offset pagination on 183k rows exceeds the
+// anon role's ~3s statement timeout on Supabase. Service role has 60s.
+// (sitemap routes do not expose any user data beyond slug/updated_at.)
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export interface ProductRow {
   slug: string
@@ -44,40 +48,70 @@ export async function countActiveProducts(): Promise<number> {
   return total ? Number(total) : 0
 }
 
+// Compute total number of chunks. Derived from the active product count
+// via ceil(count / PRODUCTS_PER_SITEMAP). The sitemap index route and the
+// chunk-range builder both need this to agree.
+export async function getProductChunkCount(): Promise<number> {
+  const total = await countActiveProducts()
+  return Math.max(1, Math.ceil(total / PRODUCTS_PER_SITEMAP))
+}
+
+// Compute UUID boundary i/N as a canonical UUID string. Boundary 0 is all
+// zeros, boundary N is all Fs. UUIDs in the DB are uniformly distributed,
+// so this gives approximately even chunk sizes.
+function uuidBoundary(i: number, total: number): string {
+  const max = (BigInt(1) << BigInt(128)) - BigInt(1)
+  const value = (max * BigInt(i)) / BigInt(total)
+  const hex = value.toString(16).padStart(32, '0')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`
+}
+
+// Fetch one chunk by UUID range. Uses keyset pagination within the range
+// so each PostgREST call hits the primary-key index (no slow OFFSET scan).
 export async function fetchProductChunk(
-  chunkIndex: number
+  chunkIndex: number,
+  totalChunks: number
 ): Promise<ProductRow[]> {
-  const start = chunkIndex * PRODUCTS_PER_SITEMAP
-  const end = start + PRODUCTS_PER_SITEMAP - 1
+  const loUuid = uuidBoundary(chunkIndex, totalChunks)
+  const hiUuid = uuidBoundary(chunkIndex + 1, totalChunks)
   const BATCH = 1000
 
-  const ranges: Array<[number, number]> = []
-  for (let offset = start; offset <= end; offset += BATCH) {
-    ranges.push([offset, Math.min(offset + BATCH - 1, end)])
+  const rows: ProductRow[] = []
+  let cursor = loUuid
+  let inclusiveOp = 'gte' // first iteration includes the lower boundary
+
+  // Loop until the range is exhausted. Each request uses the pk index so
+  // it stays well inside the statement timeout even for the last chunk.
+  while (true) {
+    const q = new URLSearchParams({
+      select: 'id,slug,updated_at',
+      is_active: 'eq.true',
+      id: `${inclusiveOp}.${cursor}`,
+      order: 'id.asc',
+      limit: String(BATCH),
+    })
+    // The upper bound is exclusive of the next chunk's lower boundary so
+    // chunks don't overlap. We append it as a second filter on id.
+    const url = `${SUPABASE_URL}/rest/v1/products?${q.toString()}&id=lt.${hiUuid}`
+    const res = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+      },
+      cache: 'no-store',
+    })
+    if (!res.ok) break
+    const data = (await res.json()) as Array<ProductRow & { id: string }>
+    if (!data || data.length === 0) break
+
+    for (const r of data) rows.push({ slug: r.slug, updated_at: r.updated_at })
+    if (data.length < BATCH) break
+
+    cursor = data[data.length - 1].id
+    inclusiveOp = 'gt' // subsequent iterations skip the last-seen id
   }
 
-  // Fire all PostgREST range reads in parallel so one chunk finishes in the
-  // time of the slowest single request rather than sequential sum.
-  const batches = await Promise.all(
-    ranges.map(async ([lo, hi]): Promise<ProductRow[]> => {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/products?select=slug,updated_at&is_active=eq.true&order=id.asc`,
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-            Range: `${lo}-${hi}`,
-            'Range-Unit': 'items',
-          },
-          cache: 'no-store',
-        }
-      )
-      if (!res.ok) return []
-      return (await res.json()) as ProductRow[]
-    })
-  )
-
-  return batches.flat()
+  return rows
 }
 
 export function xmlEscape(s: string): string {

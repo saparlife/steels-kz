@@ -1,10 +1,9 @@
 import { notFound } from 'next/navigation'
 import {
-  PRODUCTS_PER_SITEMAP,
   SITE_URL,
   SitemapUrl,
-  countActiveProducts,
   fetchProductChunk,
+  getProductChunkCount,
   urlsetXml,
 } from '../../_lib'
 
@@ -19,11 +18,10 @@ export async function GET(
   const chunkIndex = Number(id)
   if (!Number.isInteger(chunkIndex) || chunkIndex < 0) notFound()
 
-  const total = await countActiveProducts()
-  const maxChunk = Math.max(0, Math.ceil(total / PRODUCTS_PER_SITEMAP) - 1)
-  if (chunkIndex > maxChunk) notFound()
+  const totalChunks = await getProductChunkCount()
+  if (chunkIndex >= totalChunks) notFound()
 
-  const products = await fetchProductChunk(chunkIndex)
+  const products = await fetchProductChunk(chunkIndex, totalChunks)
   const urls: SitemapUrl[] = products.map((p) => ({
     loc: `${SITE_URL}/product/${p.slug}`,
     lastmod: p.updated_at ? new Date(p.updated_at).toISOString() : undefined,

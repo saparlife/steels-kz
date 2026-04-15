@@ -1,7 +1,6 @@
 import {
-  PRODUCTS_PER_SITEMAP,
   SITE_URL,
-  countActiveProducts,
+  getProductChunkCount,
   sitemapIndexXml,
 } from '../sitemaps/_lib'
 
@@ -9,8 +8,7 @@ export const revalidate = 3600
 export const maxDuration = 30
 
 export async function GET() {
-  const total = await countActiveProducts()
-  const productChunks = Math.max(1, Math.ceil(total / PRODUCTS_PER_SITEMAP))
+  const productChunks = await getProductChunkCount()
   const now = new Date().toISOString()
 
   const entries = [
