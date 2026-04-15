@@ -1,7 +1,10 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://temir-service.kz'
 
-export const PRODUCTS_PER_SITEMAP = 40000
+// Keep chunks small enough that fetching one completes well under Vercel's
+// 60s function timeout even if the DB is slow. 10k / 1000 = 10 parallel
+// PostgREST reads per chunk, each finishing in < 2s → ~5s worst case.
+export const PRODUCTS_PER_SITEMAP = 10000
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -46,31 +49,35 @@ export async function fetchProductChunk(
 ): Promise<ProductRow[]> {
   const start = chunkIndex * PRODUCTS_PER_SITEMAP
   const end = start + PRODUCTS_PER_SITEMAP - 1
-  const rows: ProductRow[] = []
   const BATCH = 1000
 
+  const ranges: Array<[number, number]> = []
   for (let offset = start; offset <= end; offset += BATCH) {
-    const upper = Math.min(offset + BATCH - 1, end)
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/products?select=slug,updated_at&is_active=eq.true&order=id.asc`,
-      {
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-          Range: `${offset}-${upper}`,
-          'Range-Unit': 'items',
-        },
-        cache: 'no-store',
-      }
-    )
-    if (!res.ok) break
-    const data = (await res.json()) as ProductRow[]
-    if (!data || data.length === 0) break
-    rows.push(...data)
-    if (data.length < upper - offset + 1) break
+    ranges.push([offset, Math.min(offset + BATCH - 1, end)])
   }
 
-  return rows
+  // Fire all PostgREST range reads in parallel so one chunk finishes in the
+  // time of the slowest single request rather than sequential sum.
+  const batches = await Promise.all(
+    ranges.map(async ([lo, hi]): Promise<ProductRow[]> => {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/products?select=slug,updated_at&is_active=eq.true&order=id.asc`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            Range: `${lo}-${hi}`,
+            'Range-Unit': 'items',
+          },
+          cache: 'no-store',
+        }
+      )
+      if (!res.ok) return []
+      return (await res.json()) as ProductRow[]
+    })
+  )
+
+  return batches.flat()
 }
 
 export function xmlEscape(s: string): string {
