@@ -46,3 +46,4 @@ supabase/.branches/
 
 # scripts with secrets
 scripts/create-admin.ts
+.env*.local
